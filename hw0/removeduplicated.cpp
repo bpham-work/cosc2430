@@ -39,7 +39,6 @@ int main(int argc, char* argv[]) {
     // output unique records
     std::ofstream ofs(output);
     for (set<string>::iterator record = allRecords.begin(); record != allRecords.end(); ++record) {
-        cout << *record << endl;
         ofs << *record << endl;
     }
     

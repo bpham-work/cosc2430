@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <string.h>
 #include "personnel.h"
 
 Personnel::Personnel(string& ssn, string& name, string& city, string& yob, uint32_t& salary) : nameLen(10), cityLen(10) {

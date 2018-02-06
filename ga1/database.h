@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <string.h>
 #include "student.h"
 #include "personnelfactory.h"
 using namespace std;
@@ -89,7 +90,7 @@ template <class T>
 void Database<T>::print() {
 	this->open();
 	int streamPos = 0;
-	int eof;
+	int eof = file.peek();
 	while (eof != -1) {
 		Personnel* personFromFile = personnelFactory.createFromFile(file);
 		personFromFile->print();

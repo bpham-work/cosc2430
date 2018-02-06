@@ -8,6 +8,9 @@
 #include "personnelfactory.h"
 using namespace std;
 
+/**
+ * Database class used to read and write records to file
+ */
 template <class T>
 class Database {
 	fstream file;
@@ -31,6 +34,9 @@ Database<T>::Database(PersonnelFactory& personnelFactory) {
 	this->personnelFactory = personnelFactory;
 };
 
+/**
+ * Find matching record in file by personnel
+ */
 template <class T>
 int Database<T>::find(T& person) {
 	this->open();
@@ -51,6 +57,10 @@ int Database<T>::find(T& person) {
     return -1;
 };
 
+/**
+ * Find matching record by ssn
+ * Returns Personnel object
+ */
 template <class T>
 Personnel* Database<T>::findBySSN(string& ssn) {
 	this->open();
@@ -69,6 +79,9 @@ Personnel* Database<T>::findBySSN(string& ssn) {
     return NULL;
 }
 
+/**
+ * Modifies record in file with new personnel
+ */
 template <class T>
 void Database<T>::modify(T& person) {
 	int streamPos = this->find(person);
@@ -78,6 +91,9 @@ void Database<T>::modify(T& person) {
 	}
 };
 
+/**
+ * Adds personnel record to file
+ */
 template <class T>
 void Database<T>::add(T& person) {
 	this->open();
@@ -86,6 +102,9 @@ void Database<T>::add(T& person) {
 	this->close();
 }
 
+/**
+ * Prints all personnel in file
+ */
 template <class T>
 void Database<T>::print() {
 	this->open();
@@ -101,6 +120,9 @@ void Database<T>::print() {
 	this->close();
 }
 
+/**
+ * Utility function used to create file if doesn't exist and open it
+ */
 template <class T>
 void Database<T>::open() {
 	file.open("input.txt", fstream::out | fstream::in);

@@ -37,6 +37,9 @@ Personnel::~Personnel() {
 	delete yearOfBirth;
 }
 
+/**
+ * Write object values to file
+ */
 void Personnel::writeToFile(fstream& file) const {
 	file.write(ssn, 9);
 	file.write(name, nameLen);
@@ -45,14 +48,23 @@ void Personnel::writeToFile(fstream& file) const {
 	file.write(reinterpret_cast<const char*>(&salary), sizeof(&salary));
 }
 
+/**
+ * Read record from file and create new personnel
+ */
 Personnel* readFromFile(fstream& file) {
 	return new Personnel(file);
 }
 
+/**
+ * Return size of record
+ */
 int Personnel::size() {
 	return 9 + nameLen + cityLen + 4 + sizeof(&salary);
 }
 
+/**
+ * Equality operator overload
+ */
 bool Personnel::operator==(const Personnel& rhs) {
 	// strcomp returns 0 if cstrings are equal
 	return strcmp(this->ssn, rhs.ssn) == 0;

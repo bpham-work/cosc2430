@@ -6,6 +6,9 @@
 #include "personnelfactory.h"
 using namespace std;
 
+/**
+ * Add student to database
+ */
 void add(Database<Student>& db, PersonnelFactory& factory) {
 	cout << endl;
 	cout << "----- ADD NEW STUDENT -----" << endl;
@@ -30,6 +33,9 @@ void add(Database<Student>& db, PersonnelFactory& factory) {
 	newStudent.print();
 }
 
+/**
+ * Find student in database
+ */
 void findStudent(Database<Student>& db) {
 	cout << endl;
 	cout << "----- FIND STUDENT BY SSN -----" << endl;
@@ -45,6 +51,9 @@ void findStudent(Database<Student>& db) {
 	cout << endl;
 }
 
+/**
+ * Modify student in database
+ */
 void modifyStudent(Database<Student>& db) {
 	cout << endl;
 	cout << "----- MODIFY STUDENT -----" << endl;
@@ -78,6 +87,9 @@ void modifyStudent(Database<Student>& db) {
 	cout << endl;
 }
 
+/**
+ * Print all students in database
+ */
 void printAll(Database<Student>& db) {
 	cout << endl;
 	cout << "----- PRINTING ALL STUDENTS -----" << endl;

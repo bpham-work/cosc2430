@@ -19,15 +19,24 @@ Student::~Student() {
 	delete major;
 }
 
+/**
+ * Write object values to file
+ */
 void Student::writeToFile(fstream& file) const {
 	Personnel::writeToFile(file);
 	file.write(major, majorLen);
 }
 
+/**
+ * Read record from file and create new student
+ */
 Student* Student::readFromFile(fstream& file) const {
 	return new Student(file);
 }
 
+/**
+ * Return size of record
+ */
 int Student::size() {
 	return Personnel::size() + majorLen;
 }

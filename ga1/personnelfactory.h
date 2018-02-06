@@ -4,6 +4,9 @@
 #include <fstream>
 #include "personnel.h"
 
+/**
+ * Factory class used to instantiate personnel objects from records in file
+ */
 class PersonnelFactory {
 	string PERSONNEL_TYPE = "PERSONNEL";
 	string STUDENT_TYPE = "STUDENT";

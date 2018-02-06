@@ -16,10 +16,13 @@ Personnel::Personnel(string& ssn, string& name, string& city, string& yob, uint3
 }
 
 Personnel::Personnel(fstream& file) : nameLen(10), cityLen(10) {
-	ssn = new char[9];
+	ssn = new char[10];
+	// Fix to remove reading special chars
+	ssn[9] = '\0';
     name = new char[nameLen];
     city = new char[cityLen];
-	yearOfBirth = new char[4];
+	yearOfBirth = new char[5];
+	yearOfBirth[4] = '\0';
 	file.read(ssn, 9);
 	file.read(name, nameLen);
 	file.read(city, cityLen);

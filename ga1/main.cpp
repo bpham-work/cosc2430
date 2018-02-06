@@ -27,10 +27,17 @@ void add(Database<Student>& db, PersonnelFactory& factory) {
 	cout << "Major: ";
 	cin >> major;
 	Student newStudent(ssn, name, city, yob, salary, major);
-	db.add(newStudent);
+
+	Personnel* student = db.findBySSN(ssn);
+	if (student == NULL) {
+		db.add(newStudent);
+		cout << endl;
+		cout << "Added student: " << endl;
+		newStudent.print();
+	} else {
+		cout << "Student with entered SSN already exists" << endl;
+	}
 	cout << endl;
-	cout << "Added student: " << endl;
-	newStudent.print();
 }
 
 /**

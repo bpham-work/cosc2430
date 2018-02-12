@@ -15,10 +15,10 @@ class LinkedList {
         void push(T val);
         T peekTail();
         T peekHead();
-		void rotate();
-		void clear();
-		void print();
-		string toString();
+        void rotate();
+        void clear();
+        void print();
+        string toString();
     private:
         T peekTail(Node<T>* node);
         Node<T>* getTail();
@@ -72,7 +72,7 @@ template <class T>
 Node<T>* LinkedList<T>::getTail() {
     Node<T>* tail = this->head;
     while (tail->next != nullptr) tail = tail->next;
-	return tail;
+    return tail;
 }
 
 template <class T>
@@ -84,38 +84,38 @@ T LinkedList<T>::peekHead() {
 
 template <class T>
 void LinkedList<T>::rotate() {
-	Node<T>* tail = this->getTail();
-	Node<T>* temp = this->head;
-	this->head = this->head->next;
-	temp->next = nullptr;
-	tail->next = temp;
+    Node<T>* tail = this->getTail();
+    Node<T>* temp = this->head;
+    this->head = this->head->next;
+    temp->next = nullptr;
+    tail->next = temp;
 }
 
 template <class T>
 void LinkedList<T>::clear() {
-	delete this->head;
-	this->head = nullptr;
+    delete this->head;
+    this->head = nullptr;
 }
 
 template <class T>
 void LinkedList<T>::print() {
-	Node<T>* node = this->head;
-	while (node != nullptr) {
-		cout << node->val;
-		node = node->next;
-	}
-	cout << endl;
+    Node<T>* node = this->head;
+    while (node != nullptr) {
+        cout << node->val;
+        node = node->next;
+    }
+    cout << endl;
 }
 
 template <class T>
 string LinkedList<T>::toString() {
-	string result;
-	Node<T>* node = this->head;
-	while (node != nullptr) {
-		result += node->val;
-		node = node->next;
-	}
-	return result;
+    string result;
+    Node<T>* node = this->head;
+    while (node != nullptr) {
+        result += node->val;
+        node = node->next;
+    }
+    return result;
 }
 
 #endif

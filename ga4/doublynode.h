@@ -1,20 +1,20 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef DOUBLY_NODE_H
+#define DOUBLY_NODE_H
 
 template <class T>
 class DoublyNode {
     public:
-        DoublyNode(T val);
+        DoublyNode(T& val);
         ~DoublyNode();
-        T val;
+        T* val;
         DoublyNode* next;
         DoublyNode* prev;
         void clearLinks();
 };
 
 template <class T>
-DoublyNode<T>::DoublyNode(T val) {
-    this->val = val;
+DoublyNode<T>::DoublyNode(T& val) {
+    this->val = &val;
     this->next = nullptr;
     this->prev = nullptr;
 }

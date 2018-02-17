@@ -4,15 +4,21 @@
 template <class T>
 class Node {
     public:
-        Node(T val);
+        Node();
+        Node(T& val);
         ~Node();
-        T val;
+        T* val;
         Node* next;
 };
 
 template <class T>
-Node<T>::Node(T val) {
-    this->val = val;
+Node<T>::Node() {
+    this->next = nullptr;
+}
+
+template <class T>
+Node<T>::Node(T& val) {
+    this->val = &val;
     this->next = nullptr;
 }
 

@@ -102,11 +102,12 @@ template <class T>
 T* LinkedList<T>::popHead() {
     if (this->head != nullptr) {
         Node<T>* temp = this->head;
-        this->head = this->head->next;
         T* toReturn = this->head->val;
-        delete temp;
+        this->head = this->head->next;
+        //delete temp;
         return toReturn;
     }
+    return nullptr;
 }
 
 template <class T>

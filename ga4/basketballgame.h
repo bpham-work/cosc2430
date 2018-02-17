@@ -32,7 +32,6 @@ BasketballGame::BasketballGame() {
 
 void BasketballGame::start() {
     for (int i = 0; i < 5; i++) {
-        cout << lockerRoom[i].toString() << endl;
         courtPlayers.append(lockerRoom[i]);
     }
     for (int i = 5; i < 12; i++) {
@@ -48,14 +47,10 @@ void BasketballGame::start() {
         gameTime += playTime;
         quarterTime += playTime;
         
-        //cout << oldestIndex << endl;
-        //cout << *oldestPlayer << endl;
-        //Player* nextOnCourt = this->benchPlayers.peekHead();
-        //cout << *nextOnCourt << endl;
-        break;
-        //this->benchPlayers.append(oldestPlayer);
-        //courtPlayers.remove(oldestIndex);
-        //courtPlayers.append(nextOnCourt);
+        Player* nextOnCourt = this->benchPlayers.popHead();
+        this->benchPlayers.append(*oldestPlayer);
+        courtPlayers.remove(oldestIndex);
+        courtPlayers.append(*nextOnCourt);
     }
     cout << gameTime << endl;
 }
@@ -65,7 +60,6 @@ int BasketballGame::getIndexOfOldestPlayer() {
     int indexOfOldest = -1;
     int counter = 0;
     for (LinkedList<Player>::iterator i = courtPlayers.begin(); !i.end(); i++) {
-        cout << (*i)->toString() << endl;
         if ((*i)->getAge() > oldestAge) {
             indexOfOldest = counter;
             oldestAge = (*i)->getAge();

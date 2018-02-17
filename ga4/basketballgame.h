@@ -19,6 +19,7 @@ class BasketballGame {
         void start();
     private:
         int getIndexOfOldestPlayer();
+        void updatePlayerPlayTimes(double mins);
 };
 
 BasketballGame::BasketballGame() {
@@ -46,7 +47,8 @@ void BasketballGame::start() {
         double playTime = oldestPlayer->getAge() / 10;
         gameTime += playTime;
         quarterTime += playTime;
-        
+        this->updatePlayerPlayTimes(playTime);
+
         Player* nextOnCourt = this->benchPlayers.popHead();
         this->benchPlayers.append(*oldestPlayer);
         courtPlayers.remove(oldestIndex);
@@ -67,6 +69,13 @@ int BasketballGame::getIndexOfOldestPlayer() {
         counter++;
     }
     return indexOfOldest;
+}
+
+void BasketballGame::updatePlayerPlayTimes(double mins) {
+    for (LinkedList<Player>::iterator i = courtPlayers.begin(); !i.end(); i++) {
+        (*i)->addMinsPlayed(mins);
+    }
+
 }
 
 #endif

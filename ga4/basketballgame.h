@@ -28,7 +28,6 @@ class BasketballGame {
 
 BasketballGame::BasketballGame() {
     srand(time(NULL));
-    this->lockerRoom[12] = {};
     for (int i = 0; i < 12; i++) {
         int age = rand() % 50 + 20;
         lockerRoom[i] = Player(i+1, age);
@@ -86,7 +85,6 @@ void BasketballGame::updatePlayerPlayTimes(double mins) {
 }
 
 void BasketballGame::createFinalList() {
-    this->finalList[12] = {};
     int counter = 0;
     for (LinkedList<Player>::iterator i = courtPlayers.begin(); !i.end(); i++) {
         finalList[counter] = (**i);

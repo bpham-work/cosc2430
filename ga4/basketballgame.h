@@ -53,6 +53,8 @@ void BasketballGame::start() {
         quarterTime += playTime;
         this->updatePlayerPlayTimes(playTime);
 
+        if (gameTime > 48) break;
+
         Player* nextOnCourt = this->benchPlayers.popHead();
         this->benchPlayers.append(*oldestPlayer);
         courtPlayers.remove(oldestIndex);
@@ -97,14 +99,18 @@ void BasketballGame::createFinalList() {
 }
 
 void BasketballGame::reportByMinsPlayed() {
-    // Sort by mins played
+    // Sort by mins played descending
     for (int i = 1; i < 12; i++) {
         int k = i;
-        while (k > 0 && finalList[k - 1].getMinsPlayed() < finalList[k].getMinsPlayed()) {
+        Player pA = finalList[k];
+        Player pB = finalList[k-1];
+        while (k > 0 && pB.getMinsPlayed() < pA.getMinsPlayed()) {
             Player temp = finalList[k];
             finalList[k] = finalList[k - 1];
             finalList[k - 1] = temp;
             k--;
+            pA = finalList[k];
+            pB = finalList[k-1];
         }
     }
 
@@ -117,19 +123,27 @@ void BasketballGame::reportByMinsPlayed() {
 }
 
 void BasketballGame::reportByAgeNumberMinsPlayed() {
-    // Sort by mins played
+    // Sort by age ascending, number ascending, minutes played ascending
     for (int i = 1; i < 12; i++) {
         int k = i;
-        while (k > 0 && finalList[k - 1].getMinsPlayed() < finalList[k].getMinsPlayed()) {
+        Player pA = finalList[k];
+        Player pB = finalList[k-1];
+        while (k > 0 &&
+                ((pB.getAge() > pA.getAge()) ||
+                (pB.getAge() == pA.getAge() && pB.getNumber() > pA.getNumber()) ||
+                (pB.getAge() == pA.getAge() && pB.getNumber() == pA.getNumber() && pB.getMinsPlayed() > pA.getMinsPlayed()))) {
             Player temp = finalList[k];
             finalList[k] = finalList[k - 1];
             finalList[k - 1] = temp;
             k--;
+            pA = finalList[k];
+            pB = finalList[k-1];
         }
     }
 
-    cout << "Number\tMinutes Played" << endl;
+    cout << "Age\tNumber\tMinutes Played" << endl;
     for (int i = 0 ; i < 12; i++) {
+        cout << finalList[i].getAge() << "\t";
         cout << finalList[i].getNumber() << "\t";
         cout << finalList[i].getMinsPlayed();
         cout << endl;

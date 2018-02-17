@@ -8,5 +8,6 @@ int main() {
     BasketballGame game;
     game.start();
     game.reportByMinsPlayed();
+    game.reportByAgeNumberMinsPlayed();
     return 0;
 }

@@ -44,7 +44,7 @@ void BasketballGame::start() {
     while (gameTime <= 48) {
         int oldestIndex = this->getIndexOfOldestPlayer();
         Player* oldestPlayer = this->courtPlayers.get(oldestIndex);
-        double playTime = oldestPlayer->getAge() / 10;
+        double playTime = oldestPlayer->getAge() / 10.0;
         gameTime += playTime;
         quarterTime += playTime;
         this->updatePlayerPlayTimes(playTime);
@@ -54,7 +54,8 @@ void BasketballGame::start() {
         courtPlayers.remove(oldestIndex);
         courtPlayers.append(*nextOnCourt);
     }
-    cout << gameTime << endl;
+    double overPlayedMins = gameTime - 48;
+    this->updatePlayerPlayTimes(-1 * overPlayedMins);
 }
 
 int BasketballGame::getIndexOfOldestPlayer() {

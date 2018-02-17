@@ -104,7 +104,8 @@ T* LinkedList<T>::popHead() {
         Node<T>* temp = this->head;
         T* toReturn = this->head->val;
         this->head = this->head->next;
-        //delete temp;
+        temp->next = nullptr;
+        delete temp;
         return toReturn;
     }
     return nullptr;
@@ -122,7 +123,8 @@ void LinkedList<T>::remove(int index) {
         }
         Node<T>* toDelete = nodeBefore->next;
         nodeBefore->next = toDelete->next;
-        //delete toDelete;
+        toDelete->next = nullptr;
+        delete toDelete;
     }
 }
 

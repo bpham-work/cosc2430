@@ -7,5 +7,6 @@ using namespace std;
 int main() {
     BasketballGame game;
     game.start();
+    game.reportByMinsPlayed();
     return 0;
 }

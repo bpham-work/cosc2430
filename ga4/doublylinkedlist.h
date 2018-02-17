@@ -24,6 +24,9 @@ class DoublyLinkedList {
         void clear();
         void print();
         string toString();
+
+        class iterator;
+        iterator begin();
 };
 
 template <class T>
@@ -154,5 +157,28 @@ string DoublyLinkedList<T>::toString() {
     }
     return result;
 }
+
+template <typename T>
+typename DoublyLinkedList<T>::iterator DoublyLinkedList<T>::begin() {
+    return typename DoublyLinkedList<T>::iterator(this->head);
+}
+
+template <class T>
+class DoublyLinkedList<T>::iterator {
+    DoublyNode<T>* current;
+    public:
+        iterator(DoublyNode<T>* head) { this->current = head; }
+        iterator& operator++() {
+            current = current->next;
+            return *this;
+        }
+        iterator& operator++(int a) {
+            current = current->next;
+            return *this;
+        }
+        T* operator*() { return current->val; }
+        bool operator!=(bool end) { return end; }
+        bool end() { return current == nullptr;  }
+};
 
 #endif

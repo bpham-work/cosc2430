@@ -14,12 +14,16 @@ class BasketballGame {
     Player lockerRoom[12];
     DoublyLinkedList<Player> benchPlayers;
     LinkedList<Player> courtPlayers;
+    Player finalList[12];
     public:
         BasketballGame();
         void start();
+        void reportByMinsPlayed();
+        void reportByAgeNumberMinsPlayed();
     private:
         int getIndexOfOldestPlayer();
         void updatePlayerPlayTimes(double mins);
+        void createFinalList();
 };
 
 BasketballGame::BasketballGame() {
@@ -56,6 +60,7 @@ void BasketballGame::start() {
     }
     double overPlayedMins = gameTime - 48;
     this->updatePlayerPlayTimes(-1 * overPlayedMins);
+    this->createFinalList();
 }
 
 int BasketballGame::getIndexOfOldestPlayer() {
@@ -76,7 +81,59 @@ void BasketballGame::updatePlayerPlayTimes(double mins) {
     for (LinkedList<Player>::iterator i = courtPlayers.begin(); !i.end(); i++) {
         (*i)->addMinsPlayed(mins);
     }
+}
 
+void BasketballGame::createFinalList() {
+    this->finalList[12] = {};
+    int counter = 0;
+    for (LinkedList<Player>::iterator i = courtPlayers.begin(); !i.end(); i++) {
+        finalList[counter] = (**i);
+        counter++;
+    }
+    for (DoublyLinkedList<Player>::iterator i = benchPlayers.begin(); !i.end(); i++) {
+        finalList[counter] = (**i);
+        counter++;
+    }
+}
+
+void BasketballGame::reportByMinsPlayed() {
+    // Sort by mins played
+    for (int i = 1; i < 12; i++) {
+        int k = i;
+        while (k > 0 && finalList[k - 1].getMinsPlayed() < finalList[k].getMinsPlayed()) {
+            Player temp = finalList[k];
+            finalList[k] = finalList[k - 1];
+            finalList[k - 1] = temp;
+            k--;
+        }
+    }
+
+    cout << "Number\tMinutes Played" << endl;
+    for (int i = 0 ; i < 12; i++) {
+        cout << finalList[i].getNumber() << "\t";
+        cout << finalList[i].getMinsPlayed();
+        cout << endl;
+    }
+}
+
+void BasketballGame::reportByAgeNumberMinsPlayed() {
+    // Sort by mins played
+    for (int i = 1; i < 12; i++) {
+        int k = i;
+        while (k > 0 && finalList[k - 1].getMinsPlayed() < finalList[k].getMinsPlayed()) {
+            Player temp = finalList[k];
+            finalList[k] = finalList[k - 1];
+            finalList[k - 1] = temp;
+            k--;
+        }
+    }
+
+    cout << "Number\tMinutes Played" << endl;
+    for (int i = 0 ; i < 12; i++) {
+        cout << finalList[i].getNumber() << "\t";
+        cout << finalList[i].getMinsPlayed();
+        cout << endl;
+    }
 }
 
 #endif

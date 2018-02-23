@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
 
     string* records = createRecordsFromFile(input);
     Comparator comparator = readAttrKeys(attributes);
-    Sorter::selectionSort(records, 4, comparator);
+    Sorter::insertionSort(records, 4, comparator);
     print(records, 4);
 
     if (sortType == "select") {

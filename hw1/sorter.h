@@ -10,9 +10,12 @@ class Sorter {
         static void selectionSort(string* records, const int& arrSize, Comparator& comparator);
         static void insertionSort(string* records, const int& arrSize, Comparator& comparator);
         static void quickSort(string* records, const int& arrSize, Comparator& comparator);
+        static void mergeSort(string* records, const int& arrSize, Comparator& comparator);
     private:
         static void quickSort(string* records, int lo, int hi, Comparator& comparator);
         static int partition(string* records, int lo, int hi, Comparator& comparator);
+        static void mergeSort(string* records, string* aux, const int& lo, const int& hi, Comparator& comparator);
+        static void merge(string* records, string* aux, const int& lo, const int& hi, Comparator& comparator);
         static void swap(string* records, int index1, int index2);
 };
 
@@ -66,6 +69,39 @@ int Sorter::partition(string* records, int lo, int hi, Comparator& comparator) {
         right--;
     }
     return right;
+}
+
+void Sorter::mergeSort(string* records, const int& arrSize, Comparator& comparator) {
+    string aux[arrSize];
+    mergeSort(records, aux, 0, arrSize-1, comparator);
+}
+
+void Sorter::mergeSort(string* records, string* aux, const int& lo, const int& hi, Comparator& comparator) {
+    if (lo >= hi) return;
+    int mid = (lo + hi) / 2;
+    mergeSort(records, aux, lo, mid, comparator);
+    mergeSort(records, aux, mid+1, hi, comparator);
+    merge(records, aux, lo, hi, comparator);
+}
+
+void Sorter::merge(string* records, string* aux, const int& lo, const int& hi, Comparator& comparator) {
+    for (int i = lo; i <= hi; i++) aux[i] = records[i];
+    int mid = (lo + hi) / 2;
+    int left = lo;
+    int right = mid + 1;
+    int insert = lo;
+    while (insert <= hi) {
+        if (left > mid) {
+            records[insert] = aux[right++];
+        } else if (right > hi) {
+            records[insert] = aux[left++];
+        } else if (comparator.compare(aux[left], aux[right]) <= 0) {
+            records[insert] = aux[left++];
+        } else {
+            records[insert] = aux[right++];
+        }
+        insert++;
+    }
 }
 
 void Sorter::swap(string* records, int index1, int index2) {

@@ -8,20 +8,25 @@
 #include "doublylinkedlist.h"
 #include "linkedlist.h"
 #include "player.h"
+#include "replacementrecord.h"
 using namespace std;
 
 class BasketballGame {
     Player lockerRoom[12];
     DoublyLinkedList<Player> benchPlayers;
     LinkedList<Player> courtPlayers;
+    LinkedList<ReplacementRecord> replacements;
     Player finalList[12];
+    double gameTime = 0;
     public:
         BasketballGame();
         void start();
         void reportByMinsPlayed();
         void reportByAgeNumberMinsPlayed();
+        void reportReplacements();
     private:
         int getIndexOfOldestPlayer();
+        void replaceOldestPlayer(int oldestIndex, Player* oldestPlayer);
         void updatePlayerPlayTimes(double mins);
         void createFinalList();
 };
@@ -42,24 +47,17 @@ void BasketballGame::start() {
         benchPlayers.append(lockerRoom[i]);
     }
 
-    double gameTime = 0;
-    double quarterTime = 0;
     while (gameTime <= 48) {
         int oldestIndex = this->getIndexOfOldestPlayer();
         Player* oldestPlayer = this->courtPlayers.get(oldestIndex);
         double playTime = oldestPlayer->getAge() / 10.0;
-        gameTime += playTime;
-        quarterTime += playTime;
+        this->gameTime += playTime;
         this->updatePlayerPlayTimes(playTime);
 
         if (gameTime > 48) break;
-
-        Player* nextOnCourt = this->benchPlayers.popHead();
-        this->benchPlayers.append(*oldestPlayer);
-        courtPlayers.remove(oldestIndex);
-        courtPlayers.append(*nextOnCourt);
+        this->replaceOldestPlayer(oldestIndex, oldestPlayer);
     }
-    double overPlayedMins = gameTime - 48;
+    double overPlayedMins = this->gameTime - 48;
     this->updatePlayerPlayTimes(-1 * overPlayedMins);
     this->createFinalList();
 }
@@ -76,6 +74,17 @@ int BasketballGame::getIndexOfOldestPlayer() {
         counter++;
     }
     return indexOfOldest;
+}
+
+void BasketballGame::replaceOldestPlayer(int oldestIndex, Player* oldestPlayer) {
+    Player* nextOnCourt = this->benchPlayers.popHead();
+    this->benchPlayers.append(*oldestPlayer);
+    courtPlayers.remove(oldestIndex);
+    courtPlayers.append(*nextOnCourt);
+    ReplacementRecord replacement(nextOnCourt->getNumber(), oldestPlayer->getNumber(), this->gameTime);
+    replacements.append(replacement);
+
+    this->reportReplacements();
 }
 
 void BasketballGame::updatePlayerPlayTimes(double mins) {
@@ -145,6 +154,13 @@ void BasketballGame::reportByAgeNumberMinsPlayed() {
         cout << finalList[i].getNumber() << "\t";
         cout << finalList[i].getMinsPlayed();
         cout << endl;
+    }
+}
+
+void BasketballGame::reportReplacements() {
+    cout << "Replacement Player\tReplacing\tReplacement Time in Quarter or in Total" << endl;
+    for (LinkedList<ReplacementRecord>::iterator i = replacements.begin(); !i.end(); i++) {
+        cout <<  (*i)->getPlayerIn() << "\t" << (*i)->getPlayerOut() << "\t" << (*i)->getTimestamp() << endl;
     }
 }
 

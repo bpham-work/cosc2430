@@ -7,7 +7,8 @@ using namespace std;
 int main() {
     BasketballGame game;
     game.start();
-    game.reportByMinsPlayed();
+    //game.reportByMinsPlayed();
     game.reportByAgeNumberMinsPlayed();
+    //game.reportReplacements();
     return 0;
 }

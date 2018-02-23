@@ -4,18 +4,17 @@
 
 #include "doublylinkedlist.h"
 #include "comparator.h"
+#include "sorter.h"
 using namespace std;
 
 string* createRecordsFromFile(string& input) {
     DoublyLinkedList<string> list;
     ifstream in_file(input);
-
     string record;
     while (getline(in_file, record)) {
         list.append(record);
     }
     string* records = list.toArray();
-
     in_file.close();
     return records;
 }
@@ -26,7 +25,6 @@ Comparator readAttrKeys(string& attrFile) {
     string attr;
     while (in_file >> attr) {
         list.append(attr);
-        cout << attr << endl;
     }
     in_file.close();
     return Comparator(list.toArray(), list.size());
@@ -34,6 +32,10 @@ Comparator readAttrKeys(string& attrFile) {
 
 string getArg(string input) {
     return input.substr(input.find("=")+1);
+}
+
+void print(string* arr, int n) {
+    for (int i = 0; i < n; i++) cout << arr[i] << endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -44,7 +46,8 @@ int main(int argc, char* argv[]) {
 
     string* records = createRecordsFromFile(input);
     Comparator comparator = readAttrKeys(attributes);
-    cout << comparator.compare("first:a", "first:z") << endl;
+    Sorter::selectionSort(records, 4, comparator);
+    print(records, 4);
 
     if (sortType == "select") {
 

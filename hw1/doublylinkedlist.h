@@ -17,11 +17,11 @@ class DoublyLinkedList {
         void append(T& val);
         void push(T& val);
         int size();
-        T* peekTail();
-        T* peekHead();
-        T* popFromLeft(int position);
-        T* popHead();
-        T* popFromRight(int position);
+        T& peekTail();
+        T& peekHead();
+        T& popFromLeft(int position);
+        T& popHead();
+        T& popFromRight(int position);
         void deleteNode(DoublyNode<T>* node);
         void clear();
         void print();
@@ -46,12 +46,10 @@ template <class T>
 void DoublyLinkedList<T>::append(T& val) {
     DoublyNode<T>* newNode = new DoublyNode<T>(val);
     if (this->head == nullptr) {
-        this->head = newNode;
-        this->tail = newNode;
+        this->head = this->tail = newNode;
     } else {
-        DoublyNode<T>* temp = this->tail;
-        temp->next = newNode;
-        newNode->prev = temp;
+        this->tail->next = newNode;
+        newNode->prev = this->tail;
         this->tail = newNode;
     }
     count++;
@@ -61,11 +59,10 @@ template <class T>
 void DoublyLinkedList<T>::push(T& val) {
     DoublyNode<T>* newNode = new DoublyNode<T>(val);
     if (this->head == nullptr) {
-        this->head = newNode;
-        this->tail = newNode;
+        this->head = this->tail = newNode;
     } else {
-        DoublyNode<T>* temp = this->head;
-        newNode->next = temp;
+        this->head->prev = newNode;
+        newNode->next = this->head;
         this->head = newNode;
     }
     count++;
@@ -77,28 +74,28 @@ int DoublyLinkedList<T>::size() {
 }
 
 template <class T>
-T* DoublyLinkedList<T>::peekTail() {
+T& DoublyLinkedList<T>::peekTail() {
     if (this->tail != nullptr)
         return this->tail->val;
     return nullptr;
 }
 
 template <class T>
-T* DoublyLinkedList<T>::peekHead() {
+T& DoublyLinkedList<T>::peekHead() {
     if (this->head != nullptr)
         return this->head->val;
     return nullptr;
 }
 
 template <class T>
-T* DoublyLinkedList<T>::popHead() {
+T& DoublyLinkedList<T>::popHead() {
     count--;
     return this->popFromLeft(0);
 }
 
 template <class T>
-T* DoublyLinkedList<T>::popFromLeft(int index) {
-    //if (this->head == nullptr) return NULL;
+T& DoublyLinkedList<T>::popFromLeft(int index) {
+    if (this->head == nullptr) return NULL;
     int counter = 0;
     DoublyNode<T>* node = this->head;
     while (counter < index) {
@@ -112,8 +109,8 @@ T* DoublyLinkedList<T>::popFromLeft(int index) {
 }
 
 template <class T>
-T* DoublyLinkedList<T>::popFromRight(int index) {
-    //if (this->tail == nullptr) return NULL;
+T& DoublyLinkedList<T>::popFromRight(int index) {
+    if (this->tail == nullptr) return NULL;
     int counter = 0;
     DoublyNode<T>* node = this->tail;
     while (counter < index) {
@@ -178,8 +175,9 @@ T* DoublyLinkedList<T>::toArray() {
     int counter = 0;
     DoublyNode<T>* node = this->head;
     while (node != nullptr) {
-        array[counter++] = *(node->val);
+        array[counter] = node->val;
         node = node->next;
+        counter++;
     }
     return array;
 }

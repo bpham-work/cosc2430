@@ -6,7 +6,7 @@ class DoublyNode {
     public:
         DoublyNode(T& val);
         ~DoublyNode();
-        T* val;
+        T val;
         DoublyNode* next;
         DoublyNode* prev;
         void clearLinks();
@@ -14,7 +14,7 @@ class DoublyNode {
 
 template <class T>
 DoublyNode<T>::DoublyNode(T& val) {
-    this->val = &val;
+    this->val = val;
     this->next = nullptr;
     this->prev = nullptr;
 }

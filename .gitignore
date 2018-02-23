@@ -5,3 +5,8 @@
 .emacs
 **/.DS_Store
 **/main
+**/*.diff
+**/*.stderr
+**/*.stdout
+**/TIMEOUT
+main

@@ -9,7 +9,10 @@ class Sorter {
     public:
         static void selectionSort(string* records, const int& arrSize, Comparator& comparator);
         static void insertionSort(string* records, const int& arrSize, Comparator& comparator);
+        static void quickSort(string* records, const int& arrSize, Comparator& comparator);
     private:
+        static void quickSort(string* records, int lo, int hi, Comparator& comparator);
+        static int partition(string* records, int lo, int hi, Comparator& comparator);
         static void swap(string* records, int index1, int index2);
 };
 
@@ -34,6 +37,35 @@ void Sorter::insertionSort(string* records, const int& arrSize, Comparator& comp
             k--;
         }
     }
+}
+
+void Sorter::quickSort(string* records, const int& arrSize, Comparator& comparator) {
+    quickSort(records, 0, arrSize-1, comparator);
+}
+
+void Sorter::quickSort(string* records, int lo, int hi, Comparator& comparator) {
+    if (lo >= hi) return;
+    int partitionIndex = partition(records, lo, hi, comparator);
+    quickSort(records, lo, partitionIndex - 1, comparator);
+    quickSort(records, partitionIndex + 1, hi, comparator);
+}
+
+int Sorter::partition(string* records, int lo, int hi, Comparator& comparator) {
+    int part = lo;
+    int left = lo + 1;
+    int right = hi;
+    while (left <= hi && right >= lo) {
+        while (comparator.compare(records[left], records[part]) < 0) left++;
+        while (comparator.compare(records[right], records[part]) > 0) right--;
+        if (left >= right) {
+            swap(records, right, part);
+            return right;
+        }
+        swap(records, left, right);
+        left++;
+        right--;
+    }
+    return right;
 }
 
 void Sorter::swap(string* records, int index1, int index2) {

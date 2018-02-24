@@ -18,6 +18,7 @@ Comparator::Comparator(string keys[], int numOfKeys) : keys(keys), numOfKeys(num
 int Comparator::compare(string record1, string record2) {
     int compareResults[numOfKeys];
     for (int i = 0; i < numOfKeys; i++) {
+        if (i > 0 && compareResults[i-1] != 0) break;
         string key = keys[i];
         string val1 = this->getAttrVal(record1, key);
         string val2 = this->getAttrVal(record2, key);

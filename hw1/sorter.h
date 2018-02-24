@@ -11,12 +11,15 @@ class Sorter {
         static void insertionSort(string* records, const int& arrSize, Comparator& comparator);
         static void quickSort(string* records, const int& arrSize, Comparator& comparator);
         static void mergeSort(string* records, const int& arrSize, Comparator& comparator);
+        static void heapSort(string* records, const int& arrSize, Comparator& comparator);
     private:
         static void quickSort(string* records, int lo, int hi, Comparator& comparator);
         static int partition(string* records, int lo, int hi, Comparator& comparator);
         static void mergeSort(string* records, string* aux, const int& lo, const int& hi, Comparator& comparator);
         static void merge(string* records, string* aux, const int& lo, const int& hi, Comparator& comparator);
         static void swap(string* records, int index1, int index2);
+        static void heapify(string* records, const int& arrSize, Comparator& comparator);
+        static void sink(string* records, const int& node, const int& arrSize, Comparator& comparator);
 };
 
 void Sorter::selectionSort(string* records, const int& arrSize, Comparator& comparator) {
@@ -105,6 +108,59 @@ void Sorter::merge(string* records, string* aux, const int& lo, const int& hi, C
             records[insert] = aux[right++];
         }
         insert++;
+    }
+}
+
+void Sorter::heapSort(string* records, const int& arrSize, Comparator& comparator) {
+    string heap[arrSize + 1];
+    for (int i = 1; i < arrSize + 1; i++) {
+        heap[i] = records[i-1];
+    }
+    int lastIndex = arrSize;
+    heapify(heap, arrSize+1, comparator);
+    for (int i = lastIndex; i > 1; i--) {
+        swap(heap, 1, i);
+        heapify(heap, i, comparator);
+    }
+    for (int i = 1; i < arrSize + 1; i++) {
+        records[i-1] = heap[i];
+    }
+}
+
+void Sorter::heapify(string* records, const int& arrSize, Comparator& comparator) {
+    for (int i = arrSize - 1; i > 0; i--) {
+        sink(records, i, arrSize, comparator);
+    }
+}
+
+void Sorter::sink(string* records, const int& node, const int& arrSize, Comparator& comparator) {
+    int leftChild = node * 2;
+    int rightChild = node * 2 + 1;
+    if (leftChild < arrSize && rightChild < arrSize) {
+        int leftComp = comparator.compare(records[node], records[leftChild]);
+        int rightComp = comparator.compare(records[node], records[rightChild]);
+        int childComp = comparator.compare(records[leftChild], records[rightChild]);
+        if (leftComp < 0 || rightComp < 0) {
+            if (childComp < 0) {
+                swap(records, node, rightChild);
+                sink(records, rightChild, arrSize, comparator);
+            } else {
+                swap(records, node, leftChild);
+                sink(records, leftChild, arrSize, comparator);
+            }
+        }
+    } else if (leftChild < arrSize) {
+        int leftComp = comparator.compare(records[node], records[leftChild]);
+        if (leftComp < 0) {
+            swap(records, node, leftChild);
+            sink(records, leftChild, arrSize, comparator);
+        }
+    } else if (rightChild < arrSize) {
+        int rightComp = comparator.compare(records[node], records[rightChild]);
+        if (rightComp < 0) {
+            swap(records, node, rightChild);
+            sink(records, rightChild, arrSize, comparator);
+        }
     }
 }
 

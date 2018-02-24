@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     } else if (sortType == "merge") {
         Sorter::mergeSort(records, size, comparator);
     } else if (sortType == "heap") {
-        Sorter::mergeSort(records, size, comparator);
+        Sorter::heapSort(records, size, comparator);
     } else {
         cout << "Invalid sort type" << endl;
     }

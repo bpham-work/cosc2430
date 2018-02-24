@@ -23,9 +23,9 @@ class Sorter {
 };
 
 void Sorter::selectionSort(string* records, const int& arrSize, Comparator& comparator) {
-    for (int i = 0; i < arrSize; i++) {
+    for (int i = 0; i < arrSize-1; i++) {
         int minIndex = i;
-        for (int k = i; k < arrSize; k++) {
+        for (int k = i+1; k < arrSize; k++) {
             string record1 = records[k];
             string minRecord = records[minIndex];
             int comp = comparator.compare(record1, minRecord);
@@ -116,11 +116,10 @@ void Sorter::heapSort(string* records, const int& arrSize, Comparator& comparato
     for (int i = 1; i < arrSize + 1; i++) {
         heap[i] = records[i-1];
     }
-    int lastIndex = arrSize;
     heapify(heap, arrSize+1, comparator);
-    for (int i = lastIndex; i > 1; i--) {
+    for (int i = arrSize; i > 1; i--) {
         swap(heap, 1, i);
-        heapify(heap, i, comparator);
+        sink(heap, 1, i, comparator);
     }
     for (int i = 1; i < arrSize + 1; i++) {
         records[i-1] = heap[i];

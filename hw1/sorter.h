@@ -57,10 +57,39 @@ int Sorter::partition(string* records, int lo, int hi, Comparator& comparator) {
     int part = lo;
     int left = lo + 1;
     int right = hi;
+    cout << "NEW PARTITION" << endl;
     while (left <= hi && right >= lo) {
-        while (comparator.compare(records[left], records[part]) < 0) left++;
-        while (comparator.compare(records[right], records[part]) > 0) right--;
+        int leftComp = comparator.compare(records[left], records[part]);
+        cout << "COMPARE LEFT" << endl;
+        cout << records[left] << endl;
+        cout << records[part] << endl;
+        cout << part << endl;
+        while (left < hi && leftComp < 0) {
+            cout << "COMPARE LEFT" << endl;
+            cout << records[left] << endl;
+            cout << records[part] << endl;
+            cout << "LEFT: " << left << endl;
+            cout << "PART: " << part << endl;
+            left++;
+            if (left <= hi)
+            leftComp = comparator.compare(records[left], records[part]);
+        }
+        int rightComp = comparator.compare(records[right], records[part]);
+        cout << "COMPARE RIGHT" << endl;
+        cout << records[right] << endl;
+        cout << records[part] << endl;
+        cout << part << endl;
+        while (right > lo && rightComp > 0) {
+            cout << "COMPARE RIGHT" << endl;
+            cout << records[right] << endl;
+            cout << records[part] << endl;
+            cout << part << endl;
+            right--;
+            rightComp = comparator.compare(records[right], records[part]);
+        }
         if (left >= right) {
+            cout << "CROSSED" << endl;
+            cout << "PART: " << part << endl;
             swap(records, right, part);
             return right;
         }
@@ -105,6 +134,9 @@ void Sorter::merge(string* records, string* aux, const int& lo, const int& hi, C
 }
 
 void Sorter::swap(string* records, int index1, int index2) {
+    cout << "SWAPPING" << endl;
+    cout << index1 << endl;
+    cout << index2 << endl;
     string temp = records[index1];
     records[index1] = records[index2];
     records[index2] = temp;

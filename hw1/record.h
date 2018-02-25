@@ -22,7 +22,8 @@ Record::Record() {}
 
 Record::Record(string record, string* keys, int numOfKeys) : original(record) {
     for (int i = 0; i < numOfKeys; i++) {
-        compareString += this->getAttrVal(record, keys[i]) + " ";
+        compareString += this->getAttrVal(record, keys[i]);
+        if (i != numOfKeys - 1) compareString += "-";
     }
     cout << compareString << endl;
 }

@@ -25,7 +25,6 @@ Record::Record(string record, string* keys, int numOfKeys) : original(record) {
         compareString += this->getAttrVal(record, keys[i]);
         if (i != numOfKeys - 1) compareString += "-";
     }
-    cout << compareString << endl;
 }
 
 string Record::getAttrVal(string record, string key) {

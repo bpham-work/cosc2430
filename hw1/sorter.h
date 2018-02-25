@@ -17,7 +17,8 @@ class Sorter {
         static int partition(Record* records, int lo, int hi);
         static void mergeSort(Record* records, Record* aux, const int& lo, const int& hi);
         static void merge(Record* records, Record* aux, const int& lo, const int& hi);
-        static void swap(Record* records, int index1, int index2);
+        static void swap(Record* records, const int& index1, const int& index2);
+        static void swap(Record* rec1, Record* rec2);
         static void heapify(Record* records, const int& arrSize);
         static void sink(Record* records, const int& node, const int& arrSize);
 };
@@ -25,13 +26,18 @@ class Sorter {
 void Sorter::selectionSort(Record* records, const int& arrSize) {
     for (int i = 0; i < arrSize-1; i++) {
         int minIndex = i;
+        Record* min = &records[minIndex];
         for (int k = i+1; k < arrSize; k++) {
-            Record record1 = records[k];
             Record minRecord = records[minIndex];
-            int comp = record1.compare(minRecord);
-            if (comp < 0) minIndex = k;
+            int comp = records[k].compare(minRecord);
+            if (comp < 0) {
+                minIndex = k;
+                min = &records[minIndex];
+            }
         }
-        swap(records, i, minIndex);
+        if (minIndex != i) {
+            swap(&records[i], min);
+        }
     }
 }
 
@@ -39,7 +45,7 @@ void Sorter::insertionSort(Record* records, const int& arrSize) {
     for (int i = 1; i < arrSize; i++) {
         int k = i;
         while (k > 0 && records[k].compare(records[k-1]) < 0) {
-            swap(records, k, k-1);
+            swap(&records[k], &records[k-1]);
             k--;
         }
     }
@@ -163,10 +169,16 @@ void Sorter::sink(Record* records, const int& node, const int& arrSize) {
     }
 }
 
-void Sorter::swap(Record* records, int index1, int index2) {
+void Sorter::swap(Record* records, const int& index1, const int& index2) {
     Record temp = records[index1];
     records[index1] = records[index2];
     records[index2] = temp;
+}
+
+void Sorter::swap(Record* rec1, Record* rec2) {
+    Record temp = *rec1;
+    *rec1 = *rec2;
+    *rec2 = temp;
 }
 
 #endif

@@ -4,7 +4,6 @@
 #include <chrono>
 
 #include "doublylinkedlist.h"
-#include "comparator.h"
 #include "sorter.h"
 #include "record.h"
 using namespace std;

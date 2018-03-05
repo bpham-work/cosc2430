@@ -27,7 +27,7 @@ Node<T>::Node(T& val) {
 
 template <class T>
 Node<T>::~Node() {
-    if (this->next != nullptr) delete this->next;
+    //if (this->next != nullptr) delete this->next;
 }
 
 #endif

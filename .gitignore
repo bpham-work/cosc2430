@@ -9,5 +9,5 @@
 **/*.stderr
 **/*.stdout
 **/TIMEOUT
-**/main
+**/main**
 **/main_test

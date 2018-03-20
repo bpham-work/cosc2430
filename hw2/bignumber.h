@@ -16,10 +16,14 @@ class BigNumber {
         bool isNeg();
         void setNeg(bool isNeg);
         int size();
+        bool isZero();
         bool absGreater(BigNumber& num2);
+        BigNumber clone();
         BigNumber operator+(BigNumber& num2);
         BigNumber operator-(BigNumber& num2);
         BigNumber operator*(BigNumber& num2);
+        BigNumber operator--(int num2);
+        BigNumber operator--();
     private:
         void dumpDigits(Stack<int>& digits, int& carryover, string& sum);
         void dumpDigitsSub(Stack<int>& digits, bool borrow, string& diff);
@@ -50,6 +54,8 @@ void BigNumber::setNeg(bool isNeg) { isNegative = isNeg; }
 int BigNumber::size() {
     return num.size();
 }
+
+bool BigNumber::isZero() { return num == "0";  }
 
 bool BigNumber::absGreater(BigNumber& num2) {
     if (num.size() > num2.size()) {
@@ -98,6 +104,10 @@ void BigNumber::dumpDigitsSub(Stack<int>& digits, bool borrow, string& diff) {
         }
         diff.insert(0, to_string(digit));
     }
+}
+
+BigNumber BigNumber::clone() {
+    return BigNumber(num, isNegative);
 }
 
 BigNumber BigNumber::operator+(BigNumber& num2) {
@@ -173,4 +183,28 @@ BigNumber BigNumber::operator-(BigNumber& num2) {
         return result;
     }
 }
+
+BigNumber BigNumber::operator*(BigNumber& num2) {
+    BigNumber counter(num2.getNum(), false);
+    BigNumber result("0");
+    while (counter.getNum() != "0") {
+        result = result + *this;
+        counter = (counter--);
+    }
+    if ((isNegative && !num2.isNeg()) || (!isNegative && num2.isNeg())) {
+        result.setNeg(true);
+    }
+    return result; 
+}
+
+BigNumber BigNumber::operator--(int num2) {
+    BigNumber decrement("1");
+    return *this - decrement;
+}
+
+BigNumber BigNumber::operator--() {
+    BigNumber decrement("1");
+    return *this - decrement;
+}
+
 #endif

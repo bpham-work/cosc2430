@@ -224,4 +224,105 @@ namespace {
 
         ASSERT_FALSE(num1.absGreater(num2));
     }
+
+    TEST(BigNumber, Multiply1) {
+        BigNumber num1("1");
+        BigNumber num2("2");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("2", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, Multiply2) {
+        BigNumber num1("100");
+        BigNumber num2("2");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("200", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, MultiplyWithNegative1) {
+        BigNumber num1("3");
+        BigNumber num2("-2");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("6", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, MultiplyWithNegative2) {
+        BigNumber num1("30");
+        BigNumber num2("-20");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("600", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, MultiplyTwoNegatives) {
+        BigNumber num1("-3");
+        BigNumber num2("-2");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("6", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, Decrement1) {
+        BigNumber num1("1");
+
+        num1 = (num1--);
+
+        ASSERT_EQ("0", num1.getNum());
+        ASSERT_TRUE(num1.isZero());
+        ASSERT_FALSE(num1.isNeg());
+    }
+
+    TEST(BigNumber, Decrement4) {
+        BigNumber num1("2");
+
+        num1 = (num1--);
+        num1 = (num1--);
+
+        ASSERT_EQ("0", num1.getNum());
+        ASSERT_TRUE(num1.isZero());
+        ASSERT_FALSE(num1.isNeg());
+    }
+
+    TEST(BigNumber, Decrement2) {
+        BigNumber num1("0");
+
+        num1 = (num1--);
+
+        ASSERT_EQ("1", num1.getNum());
+        ASSERT_TRUE(num1.isNeg());
+    }
+
+    TEST(BigNumber, Decrement3) {
+        BigNumber num1("-1");
+
+        num1 = (num1--);
+
+        ASSERT_EQ("2", num1.getNum());
+        ASSERT_TRUE(num1.isNeg());
+    }
+
+    TEST(BigNumber, IsZero) {
+        BigNumber num1("0");
+
+        ASSERT_TRUE(num1.isZero());
+    }
+
+    TEST(BigNumber, IsNotZero) {
+        BigNumber num1("1");
+
+        ASSERT_FALSE(num1.isZero());
+    }
 }

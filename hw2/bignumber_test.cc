@@ -77,6 +77,16 @@ namespace {
         ASSERT_FALSE(result.isNeg());
     }
 
+    TEST(BigNumber, AddUnequalLengthPositiveNumbers2) {
+        BigNumber num1("12");
+        BigNumber num2("1");
+
+        BigNumber result = num1 + num2;
+
+        ASSERT_EQ("13", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
     TEST(BigNumber, AddUnequalLengthPositiveNumbersWithCarryover) {
         BigNumber num1("1");
         BigNumber num2("19");
@@ -85,5 +95,133 @@ namespace {
 
         ASSERT_EQ("20", result.getNum());
         ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, AddUnequalLengthPositiveNumbersWithCarryover2) {
+        BigNumber num1("19");
+        BigNumber num2("1");
+
+        BigNumber result = num1 + num2;
+
+        ASSERT_EQ("20", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, AddNegativeNumbers1) {
+        BigNumber num1("-2");
+        BigNumber num2("1");
+
+        BigNumber result = num1 + num2;
+
+        ASSERT_EQ("1", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, AddNegativeNumbers2) {
+        BigNumber num1("-2");
+        BigNumber num2("5");
+
+        BigNumber result = num1 + num2;
+
+        ASSERT_EQ("3", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractEqualLengthPositiveNumbers) {
+        BigNumber num1("2");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("1", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractUnequalLengthPositiveNumbers) {
+        BigNumber num1("14");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("13", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractUnequalLengthPositiveNumbersWithBorrow1) {
+        BigNumber num1("10");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("9", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+    
+    TEST(BigNumber, SubtractUnequalLengthPositiveNumbersWithBorrow2) {
+        BigNumber num1("1000");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("999", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractEqualLengthNegativeNumber1) {
+        BigNumber num1("-1");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("2", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractEqualLengthNegativeNumber2) {
+        BigNumber num1("0");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("1", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractUnequalLengthNegativeNumber1) {
+        BigNumber num1("-10");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("11", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, AbsIsGreater1) {
+        BigNumber num1("-10");
+        BigNumber num2("1");
+
+        ASSERT_TRUE(num1.absGreater(num2));
+    }
+
+    TEST(BigNumber, AbsIsGreater2) {
+        BigNumber num1("10");
+        BigNumber num2("1");
+
+        ASSERT_TRUE(num1.absGreater(num2));
+    }
+
+    TEST(BigNumber, AbsIsNotGreater1) {
+        BigNumber num1("1");
+        BigNumber num2("10");
+
+        ASSERT_FALSE(num1.absGreater(num2));
+    }
+
+    TEST(BigNumber, AbsIsNotGreater2) {
+        BigNumber num1("1");
+        BigNumber num2("-10");
+
+        ASSERT_FALSE(num1.absGreater(num2));
     }
 }

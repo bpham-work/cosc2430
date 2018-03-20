@@ -11,14 +11,18 @@ class BigNumber {
     string num = "0";
     public:
         BigNumber(string num);
+        BigNumber(string num, bool isNeg);
         string getNum();
         bool isNeg();
+        void setNeg(bool isNeg);
         int size();
+        bool absGreater(BigNumber& num2);
         BigNumber operator+(BigNumber& num2);
         BigNumber operator-(BigNumber& num2);
         BigNumber operator*(BigNumber& num2);
     private:
         void dumpDigits(Stack<int>& digits, int& carryover, string& sum);
+        void dumpDigitsSub(Stack<int>& digits, bool borrow, string& diff);
 };
 
 BigNumber::BigNumber(string num) {
@@ -30,16 +34,40 @@ BigNumber::BigNumber(string num) {
     this->num = num;
 }
 
+BigNumber::BigNumber(string num, bool isNeg): num(num), isNegative(isNeg) {}
+
 string BigNumber::getNum() {
     return num;
 }
 
 bool BigNumber::isNeg() {
+    if (num == "0") return false;
     return isNegative;
 }
 
+void BigNumber::setNeg(bool isNeg) { isNegative = isNeg; }
+
 int BigNumber::size() {
     return num.size();
+}
+
+bool BigNumber::absGreater(BigNumber& num2) {
+    if (num.size() > num2.size()) {
+        return true;
+    } else if (num.size() < num2.size()) {
+        return false;
+    } else {
+        Stack<int> num1Digits;
+        Stack<int> num2Digits;
+        for (int i = num.size()-1; i >= 0; i--) num1Digits.push(num[i]-48);
+        for (int i = num2.size()-1; i >= 0; i--) num2Digits.push(num2.getNum()[i]-48);
+        while (!num1Digits.isEmpty() && !num2Digits.isEmpty()) {
+            if (num1Digits.pop() > num2Digits.pop()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 void BigNumber::dumpDigits(Stack<int>& digits, int& carryover, string& sum) {
@@ -56,32 +84,93 @@ void BigNumber::dumpDigits(Stack<int>& digits, int& carryover, string& sum) {
     }
 }
 
-BigNumber BigNumber::operator+(BigNumber& num2) {
-    Stack<int> num1Digits;
-    Stack<int> num2Digits;
-    for (int i = 0; i < num.length(); i++) num1Digits.push(num[i]-48);
-    for (int i = 0; i < num2.size(); i++) num2Digits.push(num2.getNum()[i]-48);
-    string sum = "";
-    int carryover = 0;
-    while (!num1Digits.isEmpty() && !num2Digits.isEmpty()) {
-        int digit1 = num1Digits.pop();
-        int digit2 = num2Digits.pop();
-        int digit3 = digit1 + digit2 + carryover;
-        if (digit3 > 9) {
-            carryover = 1;
-            digit3 %= 10;
-        } else {
-            carryover = 0;
+void BigNumber::dumpDigitsSub(Stack<int>& digits, bool borrow, string& diff) {
+    while (!digits.isEmpty()) {
+        int digit = digits.pop();
+        if (borrow) {
+            if (digit == 0) {
+                digit = 9;
+                borrow = true;
+            } else {
+                digit -= 1;
+                borrow = false;
+            }
         }
-        sum.insert(0, to_string(digit3));
+        diff.insert(0, to_string(digit));
     }
-    dumpDigits(num1Digits, carryover, sum);
-    dumpDigits(num2Digits, carryover, sum);
-    if (carryover == 1) {
-        sum.insert(0, "1");
-    }
-    BigNumber result(sum);
-    return result;
 }
 
+BigNumber BigNumber::operator+(BigNumber& num2) {
+    if (isNegative && !num2.isNeg() && num2.absGreater(*this)) {
+        BigNumber positiveClone(num, false);
+        BigNumber result = num2 - positiveClone;
+        return result;
+    } else if (isNegative && !num2.isNeg()) {
+        BigNumber positiveClone(num, false);
+        BigNumber result = positiveClone - num2;
+        result.setNeg(true);
+        return result;
+    } else {
+        Stack<int> num1Digits;
+        Stack<int> num2Digits;
+        for (int i = 0; i < num.length(); i++) num1Digits.push(num[i]-48);
+        for (int i = 0; i < num2.size(); i++) num2Digits.push(num2.getNum()[i]-48);
+        string sum = "";
+        int carryover = 0;
+        while (!num1Digits.isEmpty() && !num2Digits.isEmpty()) {
+            int digit1 = num1Digits.pop();
+            int digit2 = num2Digits.pop();
+            int digit3 = digit1 + digit2 + carryover;
+            if (digit3 > 9) {
+                carryover = 1;
+                digit3 %= 10;
+            } else {
+                carryover = 0;
+            }
+            sum.insert(0, to_string(digit3));
+        }
+        dumpDigits(num1Digits, carryover, sum);
+        dumpDigits(num2Digits, carryover, sum);
+        if (carryover == 1) {
+            sum.insert(0, "1");
+        }
+        BigNumber result(sum);
+        return result;
+    }
+}
+
+BigNumber BigNumber::operator-(BigNumber& num2) {
+    if ((isNegative && !num2.isNeg()) || (num == "0" && !num2.isNeg())) {
+        BigNumber positiveClone(num, false);
+        BigNumber result = positiveClone + num2;
+        result.setNeg(true);
+        return result;
+    } else {
+        Stack<int> num1Digits;
+        Stack<int> num2Digits;
+        for (int i = 0; i < num.length(); i++) num1Digits.push(num[i]-48);
+        for (int i = 0; i < num2.size(); i++) num2Digits.push(num2.getNum()[i]-48);
+        string diff = "";
+        bool borrow = false;
+        while (!num1Digits.isEmpty() && !num2Digits.isEmpty()) {
+            int digit1 = num1Digits.pop();
+            int digit2 = num2Digits.pop();
+            if (borrow) {
+                digit1 -= 1;
+            }
+            if (digit1 < digit2) {
+                digit1 += 10;
+                borrow = true;
+            } else {
+                borrow = false;
+            }
+            int digit3 = digit1 - digit2;
+            diff.insert(0, to_string(digit3));
+        }
+        dumpDigitsSub(num1Digits, borrow, diff);
+        dumpDigitsSub(num2Digits, borrow, diff);
+        BigNumber result(diff);
+        return result;
+    }
+}
 #endif

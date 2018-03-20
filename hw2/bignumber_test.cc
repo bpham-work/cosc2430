@@ -265,6 +265,16 @@ namespace {
         ASSERT_TRUE(result.isNeg());
     }
 
+    TEST(BigNumber, MultiplyWithNegative3) {
+        BigNumber num1("-20");
+        BigNumber num2("20");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("400", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
     TEST(BigNumber, MultiplyTwoNegatives) {
         BigNumber num1("-3");
         BigNumber num2("-2");

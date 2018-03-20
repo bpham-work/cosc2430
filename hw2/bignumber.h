@@ -23,7 +23,6 @@ class BigNumber {
         BigNumber operator-(BigNumber& num2);
         BigNumber operator*(BigNumber& num2);
         BigNumber operator--(int num2);
-        BigNumber operator--();
     private:
         void dumpDigits(Stack<int>& digits, int& carryover, string& sum);
         void dumpDigitsSub(Stack<int>& digits, bool borrow, string& diff);
@@ -198,11 +197,6 @@ BigNumber BigNumber::operator*(BigNumber& num2) {
 }
 
 BigNumber BigNumber::operator--(int num2) {
-    BigNumber decrement("1");
-    return *this - decrement;
-}
-
-BigNumber BigNumber::operator--() {
     BigNumber decrement("1");
     return *this - decrement;
 }

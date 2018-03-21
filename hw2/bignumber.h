@@ -1,15 +1,17 @@
 #ifndef BIG_NUMBER_H
 #define BIG_NUMBER_H
 
+#include <iostream>
 #include <string>
 #include <algorithm>
 #include "stack.h"
 using namespace std;
 
 class BigNumber {
-    bool isNegative;
+    bool isNegative = false;
     string num = "0";
     public:
+        BigNumber();
         BigNumber(string num);
         BigNumber(string num, bool isNeg);
         string getNum();
@@ -18,7 +20,8 @@ class BigNumber {
         int size();
         bool isZero();
         bool absGte(BigNumber& num2);
-        BigNumber clone();
+        BigNumber clone(bool isNeg = false);
+        string toString();
         BigNumber operator+(BigNumber& num2);
         BigNumber operator-(BigNumber& num2);
         BigNumber operator*(BigNumber& num2);
@@ -28,6 +31,8 @@ class BigNumber {
         void dumpDigits(Stack<int>& digits, int& carryover, string& sum);
         void dumpDigitsSub(Stack<int>& digits, bool borrow, string& diff);
 };
+
+BigNumber::BigNumber() {}
 
 BigNumber::BigNumber(string num) {
     if (num[0] == '-' || num[0] == '+') {
@@ -113,18 +118,32 @@ void BigNumber::dumpDigitsSub(Stack<int>& digits, bool borrow, string& diff) {
     }
 }
 
-BigNumber BigNumber::clone() {
-    return BigNumber(num, isNegative);
+BigNumber BigNumber::clone(bool isNeg) {
+    return BigNumber(num, isNeg);
+}
+
+string BigNumber::toString() {
+    if (isNegative) return "-" + num;
+    return num;
 }
 
 BigNumber BigNumber::operator+(BigNumber& num2) {
     if (isNegative && !num2.isNeg() && num2.absGte(*this)) {
-        this->setNeg(false);
-        BigNumber result = num2 - *this;
+        BigNumber num1PositiveClone = this->clone();
+        BigNumber result = num2 - num1PositiveClone;
         return result;
+    } else if (!isNegative && num2.isNeg() && this->absGte(num2)) {
+        BigNumber num2PositiveClone = num2.clone();
+        BigNumber result = *this - num2PositiveClone;
+        return result;
+    } else if (!isNegative && num2.isNeg() && !(this->absGte(num2))) {
+        return num2 + *this;
+    } else if (isNegative && num2.isNeg()) {
+        BigNumber num2PositiveClone = num2.clone();
+        return *this - num2PositiveClone;
     } else if (isNegative && !num2.isNeg()) {
-        this->setNeg(false);
-        BigNumber result = *this - num2;
+        BigNumber num1PositiveClone = this->clone();
+        BigNumber result = num1PositiveClone - num2;
         result.setNeg(true);
         return result;
     } else {
@@ -157,15 +176,12 @@ BigNumber BigNumber::operator+(BigNumber& num2) {
 }
 
 BigNumber BigNumber::operator-(BigNumber& num2) {
-    if (isNegative && num2.isNeg()) {
-        this->setNeg(false);
-        num2.setNeg(false);
-        BigNumber result = *this + num2;
-        result.setNeg(true);
-        return result;
+    if (num2.isNeg()) {
+        BigNumber num2PositiveClone = num2.clone();
+        return *this + num2PositiveClone;
     } else if ((isNegative && !num2.isNeg()) || (num == "0" && !num2.isNeg())) {
-        this->setNeg(false);
-        BigNumber result = *this + num2;
+        BigNumber num1PositiveClone = this->clone();
+        BigNumber result = num1PositiveClone + num2;
         result.setNeg(true);
         return result;
     } else {
@@ -206,6 +222,8 @@ BigNumber BigNumber::operator*(BigNumber& num2) {
     }
     if ((isNegative && !num2.isNeg()) || (!isNegative && num2.isNeg())) {
         result.setNeg(true);
+    } else {
+        result.setNeg(false);
     }
     return result; 
 }
@@ -216,12 +234,9 @@ BigNumber BigNumber::operator/(BigNumber& num2) {
     int quotient = 0;
     bool resultNeg = false;
     while (result.absGte(num2)) {
-        cout << "RESULT: " << result.getNum() << endl;
-        cout << "num2: " << num2.getNum() << endl;
         result = result - positiveClone2;
         quotient++;
     }
-
     if ((isNegative && !num2.isNeg()) || (!isNegative && num2.isNeg())) {
         resultNeg = true;
     }

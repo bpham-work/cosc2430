@@ -3,11 +3,11 @@
 
 namespace {
     TEST(BigNumber, ValidPositiveNum) {
-        BigNumber num("100001");
+        BigNumber num("1");
 
         string result = num.getNum();
 
-        ASSERT_EQ("100001", result);
+        ASSERT_EQ("1", result);
         ASSERT_FALSE(num.isNeg());
     }
 
@@ -127,6 +127,36 @@ namespace {
         ASSERT_FALSE(result.isNeg());
     }
 
+    TEST(BigNumber, AddNegativeNumbers3) {
+        BigNumber num1("-1");
+        BigNumber num2("1");
+
+        BigNumber result = num1 + num2;
+
+        ASSERT_EQ("0", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, AddNegativeNumbers4) {
+        BigNumber num1("11");
+        BigNumber num2("-1");
+
+        BigNumber result = num1 + num2;
+
+        ASSERT_EQ("10", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, AddNegativeNumbers5) {
+        BigNumber num1("1");
+        BigNumber num2("-10");
+
+        BigNumber result = num1 + num2;
+
+        ASSERT_EQ("9", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
     TEST(BigNumber, SubtractEqualLengthPositiveNumbers) {
         BigNumber num1("2");
         BigNumber num2("1");
@@ -197,9 +227,49 @@ namespace {
         ASSERT_TRUE(result.isNeg());
     }
 
-    TEST(BigNumber, SubtractTwoNegatives) {
+    TEST(BigNumber, SubtractOneNegativeNumber1) {
+        BigNumber num1("1");
+        BigNumber num2("-1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("2", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractOneNegativeNumber2) {
+        BigNumber num1("-1");
+        BigNumber num2("1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("2", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractTwoNegatives1) {
         BigNumber num1("-1");
         BigNumber num2("-1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("0", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractTwoNegatives2) {
+        BigNumber num1("-1");
+        BigNumber num2("-3");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("2", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractTwoNegatives3) {
+        BigNumber num1("-5");
+        BigNumber num2("-3");
 
         BigNumber result = num1 - num2;
 
@@ -426,3 +496,4 @@ namespace {
         ASSERT_FALSE(result.isNeg());
     }
 }
+

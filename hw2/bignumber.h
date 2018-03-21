@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <math.h>
 #include "stack.h"
 using namespace std;
 
@@ -219,8 +220,8 @@ BigNumber BigNumber::operator*(BigNumber& num2) {
     for (int i = 0; i < num.length(); i++) num1Digits.push(num[i]-48);
     BigNumber result("0");
     int place = 0;
+    int carry = 0;
     while (!num1Digits.isEmpty()) {
-        int carry = 0;
         string subtotal = "";
         int num1Digit = num1Digits.pop();
         for (int i = num2.size()-1; i > -1; i--) {
@@ -235,6 +236,10 @@ BigNumber BigNumber::operator*(BigNumber& num2) {
         }
         place++;
         subtotals.push(BigNumber(subtotal));
+    }
+    if (carry > 0) {
+        carry = carry * pow(10, place);
+        subtotals.push(BigNumber(to_string(carry)));
     }
 
     while(!subtotals.isEmpty()) {

@@ -325,6 +325,16 @@ namespace {
         ASSERT_FALSE(result.isNeg());
     }
 
+    TEST(BigNumber, Multiply3) {
+        BigNumber num1("6");
+        BigNumber num2("6");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("36", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
     TEST(BigNumber, MultiplyWithNegative1) {
         BigNumber num1("3");
         BigNumber num2("-2");
@@ -503,6 +513,36 @@ namespace {
         BigNumber result = num1 * num2;
 
         ASSERT_EQ("1822397243597285015", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, MultiplyTwoLargeNums2) {
+        BigNumber num1("777");
+        BigNumber num2("777");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("603729", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, MultiplyWithCarryover) {
+        BigNumber num1("5");
+        BigNumber num2("3");
+        
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("15", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, MultiplyWithCarryover2) {
+        BigNumber num1("777");
+        BigNumber num2("12");
+        
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("9324", result.getNum());
         ASSERT_FALSE(result.isNeg());
     }
 }

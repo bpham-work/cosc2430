@@ -55,15 +55,17 @@ bool ArithmeticSvc::isOperator(string& elem) {
 }
 
 BigNumber ArithmeticSvc::doMath(string& op, BigNumber& num1, BigNumber& num2) {
-    cout << num2.toString() << " " << op << " " << num1.toString() << endl;
+    BigNumber result;
     if (op == "+")
-        return num2 + num1;
+        result = num2 + num1;
     else if (op == "-")
-        return num2 - num1;
+        result = num2 - num1;
     else if (op == "*")
-        return num2 * num1;
+        result = num2 * num1;
     else
-        return num2 / num1;
+        result = num2 / num1;
+    cout << num2.toString() << " " << op << " " << num1.toString() << " = " << result.toString() << endl;
+    return result;
 }
 
 #endif

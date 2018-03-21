@@ -82,7 +82,7 @@ namespace {
 
         string result = parser.parse(expression);
 
-        ASSERT_EQ("1,1,+,2,3,+,+,1,-", result);
+        ASSERT_EQ("1,1,+,2,+,3,+,1,-", result);
     }
     
     TEST(Parser, ParseNestedParenLast) {
@@ -91,7 +91,7 @@ namespace {
 
         string result = parser.parse(expression);
 
-        ASSERT_EQ("2,3,1,2,2,+,+,-,+", result);
+        ASSERT_EQ("2,3,1,-,2,2,+,+,+", result);
     }
 
     TEST(Parser, ParseNestedParenWithMultiplyFirst) {
@@ -100,7 +100,7 @@ namespace {
 
         string result = parser.parse(expression);
 
-        ASSERT_EQ("1,1,+,2,3,*,*,1,-", result);
+        ASSERT_EQ("1,1,+,2,*,3,*,1,-", result);
     }
     
     TEST(Parser, ParseNestedParenWithMultiplyLast) {
@@ -109,7 +109,7 @@ namespace {
 
         string result = parser.parse(expression);
 
-        ASSERT_EQ("2,3,1,2,2,+,*,*,+", result);
+        ASSERT_EQ("2,3,1,*,2,2,+,*,+", result);
     }
     
     TEST(Parser, ParseNestedParenWithMultiplyFirst2) {
@@ -118,7 +118,7 @@ namespace {
 
         string result = parser.parse(expression);
 
-        ASSERT_EQ("1,1,*,2,3,-,+,1,-", result);
+        ASSERT_EQ("1,1,*,2,+,3,-,1,-", result);
     }
     
     TEST(Parser, ParseNestedParenWithMultiplyLast2) {
@@ -127,7 +127,7 @@ namespace {
 
         string result = parser.parse(expression);
 
-        ASSERT_EQ("2,3,1,2,2,*,-,+,+", result);
+        ASSERT_EQ("2,3,1,+,2,2,*,-,+", result);
     }
 
     TEST(Parser, ParseMultiDigit) {
@@ -295,6 +295,18 @@ namespace {
     TEST(Parser, testderp) {
         Parser parser;
         string exp = "321531355*5667867893-13135450/50+6567*653";
-        cout << parser.parse(exp) << endl;
+
+        string result = parser.parse(exp);
+
+        ASSERT_EQ("321531355,5667867893,*,13135450,50,/,-,6567,653,*,+", result);
+    }
+
+    TEST(Parser, testderp2) {
+        Parser parser;
+        string exp = "5*3-6/2+6*6";
+
+        string result = parser.parse(exp);
+
+        ASSERT_EQ("5,3,*,6,2,/,-,6,6,*,+", result);
     }
 }

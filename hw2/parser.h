@@ -44,7 +44,7 @@ int Parser::parse(string& exp, int i, stringstream& stream) {
         } else if (isOperator(exp[i])) {
             stream << ',';
             while (!operandStack.isEmpty() &&
-                    priority(exp[i]) < priority(operandStack.peek())) {
+                    priority(exp[i]) <= priority(operandStack.peek())) {
                 stream << operandStack.pop();
                 stream << ',';
             }

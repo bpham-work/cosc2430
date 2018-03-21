@@ -197,6 +197,16 @@ namespace {
         ASSERT_TRUE(result.isNeg());
     }
 
+    TEST(BigNumber, SubtractTwoNegatives) {
+        BigNumber num1("-1");
+        BigNumber num2("-1");
+
+        BigNumber result = num1 - num2;
+
+        ASSERT_EQ("2", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
     TEST(BigNumber, AbsIsGreater1) {
         BigNumber num1("-10");
         BigNumber num2("1");

@@ -13,6 +13,15 @@ namespace {
         ASSERT_EQ("1,1,+", result);
     }
 
+    TEST(Parser, ParseParenPlus) {
+        Parser parser;
+        string expression = "(+1+1)";
+
+        string result = parser.parse(expression);
+
+        ASSERT_EQ("1,1,+", result);
+    }
+
     TEST(Parser, ParseMultiplyFirst) {
         Parser parser;
         string expression = "2*3+1";
@@ -175,6 +184,15 @@ namespace {
         ASSERT_TRUE(result);
     }
 
+    TEST(Parser, IsValid4) {
+        Parser parser;
+        string exp = "(+1+1)";
+
+        bool result = parser.isValid(exp);
+
+        ASSERT_TRUE(result);
+    }
+
     TEST(Parser, InvalidMinus1) {
         Parser parser;
         string exp = "(1+-1)";
@@ -247,15 +265,6 @@ namespace {
         ASSERT_FALSE(result);
     }
 
-    TEST(Parser, InvalidOperators4) {
-        Parser parser;
-        string exp = "(+1+1)";
-
-        bool result = parser.isValid(exp);
-
-        ASSERT_FALSE(result);
-    }
-
     TEST(Parser, EmptyExpIsInvalid) {
         Parser parser;
         string exp = "";
@@ -276,7 +285,7 @@ namespace {
 
     TEST(Parser, ThrowInvalidArgument) {
         Parser parser;
-        string exp = "(+1+1)";
+        string exp = "(*1+1)";
 
         EXPECT_THROW({
                 parser.parse(exp);

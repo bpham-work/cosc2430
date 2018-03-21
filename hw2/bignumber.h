@@ -111,12 +111,12 @@ BigNumber BigNumber::clone() {
 
 BigNumber BigNumber::operator+(BigNumber& num2) {
     if (isNegative && !num2.isNeg() && num2.absGreater(*this)) {
-        BigNumber positiveClone(num, false);
-        BigNumber result = num2 - positiveClone;
+        this->setNeg(false);
+        BigNumber result = num2 - *this;
         return result;
     } else if (isNegative && !num2.isNeg()) {
-        BigNumber positiveClone(num, false);
-        BigNumber result = positiveClone - num2;
+        this->setNeg(false);
+        BigNumber result = *this - num2;
         result.setNeg(true);
         return result;
     } else {
@@ -149,9 +149,15 @@ BigNumber BigNumber::operator+(BigNumber& num2) {
 }
 
 BigNumber BigNumber::operator-(BigNumber& num2) {
-    if ((isNegative && !num2.isNeg()) || (num == "0" && !num2.isNeg())) {
-        BigNumber positiveClone(num, false);
-        BigNumber result = positiveClone + num2;
+    if (isNegative && num2.isNeg()) {
+        this->setNeg(false);
+        num2.setNeg(false);
+        BigNumber result = *this + num2;
+        result.setNeg(true);
+        return result;
+    } else if ((isNegative && !num2.isNeg()) || (num == "0" && !num2.isNeg())) {
+        this->setNeg(false);
+        BigNumber result = *this + num2;
         result.setNeg(true);
         return result;
     } else {

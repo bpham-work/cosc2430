@@ -14,7 +14,7 @@ class Parser {
     private:
         int parse(string& exp, int start, stringstream& stream);
         bool isOperator(char character);
-        bool isNegativeOperator(int i, string& exp);
+        bool isNegPosOperator(int i, string& exp);
         bool isOperand(char character);
         bool isOperandOrCloseParen(char character);
         bool isOperandOrOpenParen(char character);
@@ -36,8 +36,10 @@ int Parser::parse(string& exp, int i, stringstream& stream) {
     while (i < exp.length() && exp[i] != ')') {
         if (isParenthesis(exp[i])) {
             i = parse(exp, i+1, stream);
-        } else if (isOperand(exp[i]) || isNegativeOperator(i, exp)) {
-            stream << exp[i];
+        } else if (isOperand(exp[i]) || isNegPosOperator(i, exp)) {
+            if (exp[i] != '+') {
+                stream << exp[i];
+            }
         } else if (isOperator(exp[i])) {
             stream << ',';
             while (!operandStack.isEmpty() &&
@@ -56,8 +58,8 @@ int Parser::parse(string& exp, int i, stringstream& stream) {
     return i;
 }
 
-bool Parser::isNegativeOperator(int i, string& exp) {
-    if (exp[i] == '-') {
+bool Parser::isNegPosOperator(int i, string& exp) {
+    if (exp[i] == '-' || exp[i] == '+') {
         if (i == 0 || exp[i-1] == '(') {
             return true;
         }
@@ -70,6 +72,8 @@ bool Parser::isValid(string& exp) {
     if (exp.length() == 0) return false;
     for (int i = 0; i < exp.length(); i++) {
         if (exp[i] == '-' && isOperand(exp[i+1])) {
+            continue;
+        } else if (exp[i] == '+' && exp[i-1] == '(') {
             continue;
         }
         if (isOperator(exp[i]) &&

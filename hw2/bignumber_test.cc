@@ -211,28 +211,28 @@ namespace {
         BigNumber num1("-10");
         BigNumber num2("1");
 
-        ASSERT_TRUE(num1.absGreater(num2));
+        ASSERT_TRUE(num1.absGte(num2));
     }
 
     TEST(BigNumber, AbsIsGreater2) {
         BigNumber num1("10");
         BigNumber num2("1");
 
-        ASSERT_TRUE(num1.absGreater(num2));
+        ASSERT_TRUE(num1.absGte(num2));
     }
 
     TEST(BigNumber, AbsIsNotGreater1) {
         BigNumber num1("1");
         BigNumber num2("10");
 
-        ASSERT_FALSE(num1.absGreater(num2));
+        ASSERT_FALSE(num1.absGte(num2));
     }
 
     TEST(BigNumber, AbsIsNotGreater2) {
         BigNumber num1("1");
         BigNumber num2("-10");
 
-        ASSERT_FALSE(num1.absGreater(num2));
+        ASSERT_FALSE(num1.absGte(num2));
     }
 
     TEST(BigNumber, Multiply1) {
@@ -344,5 +344,85 @@ namespace {
         BigNumber num1("1");
 
         ASSERT_FALSE(num1.isZero());
+    }
+
+    TEST(BigNumber, Divide1) {
+        BigNumber num1("20");
+        BigNumber num2("5");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("4", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, Divide2) {
+        BigNumber num1("10");
+        BigNumber num2("3");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("3", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, DivideOneNegativeNumber1) {
+        BigNumber num1("-20");
+        BigNumber num2("5");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("4", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, DivideOneNegativeNumber2) {
+        BigNumber num1("20");
+        BigNumber num2("-5");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("4", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, DivideOneNegativeNumber1WithRemainder) {
+        BigNumber num1("-10");
+        BigNumber num2("3");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("3", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, DivideOneNegativeNumber2WithRemainder) {
+        BigNumber num1("10");
+        BigNumber num2("-3");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("3", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, DivideTwoNegativeNumbers) {
+        BigNumber num1("-20");
+        BigNumber num2("-5");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("4", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, DivideTwoNegativeNumbersWithRemainder) {
+        BigNumber num1("-10");
+        BigNumber num2("-3");
+
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("3", result.getNum());
+        ASSERT_FALSE(result.isNeg());
     }
 }

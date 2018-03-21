@@ -17,11 +17,12 @@ class BigNumber {
         void setNeg(bool isNeg);
         int size();
         bool isZero();
-        bool absGreater(BigNumber& num2);
+        bool absGte(BigNumber& num2);
         BigNumber clone();
         BigNumber operator+(BigNumber& num2);
         BigNumber operator-(BigNumber& num2);
         BigNumber operator*(BigNumber& num2);
+        BigNumber operator/(BigNumber& num2);
         BigNumber operator--(int num2);
     private:
         void dumpDigits(Stack<int>& digits, int& carryover, string& sum);
@@ -56,7 +57,7 @@ int BigNumber::size() {
 
 bool BigNumber::isZero() { return num == "0";  }
 
-bool BigNumber::absGreater(BigNumber& num2) {
+bool BigNumber::absGte(BigNumber& num2) {
     if (num.size() > num2.size()) {
         return true;
     } else if (num.size() < num2.size()) {
@@ -66,10 +67,17 @@ bool BigNumber::absGreater(BigNumber& num2) {
         Stack<int> num2Digits;
         for (int i = num.size()-1; i >= 0; i--) num1Digits.push(num[i]-48);
         for (int i = num2.size()-1; i >= 0; i--) num2Digits.push(num2.getNum()[i]-48);
+        bool isEqual = true;
         while (!num1Digits.isEmpty() && !num2Digits.isEmpty()) {
+            if (num1Digits.peek() != num2Digits.peek()) {
+                isEqual = false;
+            }
             if (num1Digits.pop() > num2Digits.pop()) {
                 return true;
             }
+        }
+        if (isEqual) {
+            return true;
         }
         return false;
     }
@@ -110,7 +118,7 @@ BigNumber BigNumber::clone() {
 }
 
 BigNumber BigNumber::operator+(BigNumber& num2) {
-    if (isNegative && !num2.isNeg() && num2.absGreater(*this)) {
+    if (isNegative && !num2.isNeg() && num2.absGte(*this)) {
         this->setNeg(false);
         BigNumber result = num2 - *this;
         return result;
@@ -200,6 +208,24 @@ BigNumber BigNumber::operator*(BigNumber& num2) {
         result.setNeg(true);
     }
     return result; 
+}
+
+BigNumber BigNumber::operator/(BigNumber& num2) {
+    BigNumber result(num, false);
+    BigNumber positiveClone2(num2.getNum(), false);
+    int quotient = 0;
+    bool resultNeg = false;
+    while (result.absGte(num2)) {
+        cout << "RESULT: " << result.getNum() << endl;
+        cout << "num2: " << num2.getNum() << endl;
+        result = result - positiveClone2;
+        quotient++;
+    }
+
+    if ((isNegative && !num2.isNeg()) || (!isNegative && num2.isNeg())) {
+        resultNeg = true;
+    }
+    return BigNumber(to_string(quotient), resultNeg); 
 }
 
 BigNumber BigNumber::operator--(int num2) {

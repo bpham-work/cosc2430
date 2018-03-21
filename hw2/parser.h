@@ -100,7 +100,8 @@ bool Parser::isValid(string& exp) {
 bool Parser::isOperator(char character) {
     return character == '+' ||
         character == '-' ||
-        character == '*';
+        character == '*' ||
+        character == '/';
 }
 
 bool Parser::isOperand(char character) {
@@ -124,6 +125,9 @@ int Parser::priority(char character) {
     int priority = 0;
     switch (character) {
         case '*':
+            priority = 1;
+            break;
+        case '/':
             priority = 1;
             break;
         default:

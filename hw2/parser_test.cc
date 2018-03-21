@@ -291,4 +291,10 @@ namespace {
                 parser.parse(exp);
         }, std::invalid_argument);
     }
+
+    TEST(Parser, testderp) {
+        Parser parser;
+        string exp = "321531355*5667867893-13135450/50+6567*653";
+        cout << parser.parse(exp) << endl;
+    }
 }

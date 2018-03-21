@@ -28,7 +28,7 @@ string ArithmeticSvc::evaluate(string exp) {
     Stack<BigNumber> nums;
     while (index < postfix.size()) {
         int firstComma = postfix.find(",", index);
-        string elem;
+        string elem = "";
         if (firstComma != -1) {
             int length = firstComma - index;
             elem = postfix.substr(index, length);
@@ -55,6 +55,7 @@ bool ArithmeticSvc::isOperator(string& elem) {
 }
 
 BigNumber ArithmeticSvc::doMath(string& op, BigNumber& num1, BigNumber& num2) {
+    cout << num2.toString() << " " << op << " " << num1.toString() << endl;
     if (op == "+")
         return num2 + num1;
     else if (op == "-")

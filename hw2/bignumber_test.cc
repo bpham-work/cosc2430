@@ -495,5 +495,15 @@ namespace {
         ASSERT_EQ("3", result.getNum());
         ASSERT_FALSE(result.isNeg());
     }
+
+    TEST(BigNumber, MultiplyTwoLargeNums) {
+        BigNumber num1("321531355");
+        BigNumber num2("5667867893");
+
+        BigNumber result = num1 * num2;
+
+        ASSERT_EQ("1822397243597285015", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
 }
 

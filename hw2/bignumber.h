@@ -214,12 +214,33 @@ BigNumber BigNumber::operator-(BigNumber& num2) {
 }
 
 BigNumber BigNumber::operator*(BigNumber& num2) {
-    BigNumber counter(num2.getNum(), false);
+    Stack<int> num1Digits;
+    Stack<BigNumber> subtotals;
+    for (int i = 0; i < num.length(); i++) num1Digits.push(num[i]-48);
     BigNumber result("0");
-    while (counter.getNum() != "0") {
-        result = result + *this;
-        counter = (counter--);
+    int place = 0;
+    while (!num1Digits.isEmpty()) {
+        int carry = 0;
+        string subtotal = "";
+        int num1Digit = num1Digits.pop();
+        for (int i = num2.size()-1; i > -1; i--) {
+            int num2Digit = (num2.getNum()[i] - 48);
+            int digit3 = num1Digit * num2Digit + carry;
+            carry = digit3 / 10;
+            digit3 %= 10;
+            subtotal.insert(0, to_string(digit3));
+        }
+        for (int i = 0; i < place; i++) {
+            subtotal += "0";
+        }
+        place++;
+        subtotals.push(BigNumber(subtotal));
     }
+
+    while(!subtotals.isEmpty()) {
+        result = result + subtotals.pop();
+    }
+
     if ((isNegative && !num2.isNeg()) || (!isNegative && num2.isNeg())) {
         result.setNeg(true);
     } else {

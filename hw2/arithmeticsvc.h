@@ -37,12 +37,16 @@ string ArithmeticSvc::evaluate(string exp) {
                 BigNumber num(elem);
                 nums.push(num);
             } else {
-                BigNumber result = doMath(elem, nums.pop(), nums.pop());
+                BigNumber second = nums.pop();
+                BigNumber first = nums.pop();
+                BigNumber result = doMath(elem, second, first);
                 nums.push(result);
             }
         } else {
             elem = postfix.substr(index);
-            BigNumber result = doMath(elem, nums.pop(), nums.pop());
+            BigNumber second = nums.pop();
+            BigNumber first = nums.pop();
+            BigNumber result = doMath(elem, second, first);
             nums.push(result);
             break;
         }
@@ -64,7 +68,7 @@ BigNumber ArithmeticSvc::doMath(string& op, BigNumber& num1, BigNumber& num2) {
         result = num2 * num1;
     else
         result = num2 / num1;
-    cout << num2.toString() << " " << op << " " << num1.toString() << " = " << result.toString() << endl;
+    //cout << num2.toString() << " " << op << " " << num1.toString() << " = " << result.toString() << endl;
     return result;
 }
 

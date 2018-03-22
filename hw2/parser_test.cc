@@ -256,13 +256,13 @@ namespace {
         ASSERT_FALSE(result);
     }
 
-    TEST(Parser, InvalidOperators3) {
+    TEST(Parser, ValidOperators6) {
         Parser parser;
         string exp = "+1+1";
 
         bool result = parser.isValid(exp);
 
-        ASSERT_FALSE(result);
+        ASSERT_TRUE(result);
     }
 
     TEST(Parser, EmptyExpIsInvalid) {

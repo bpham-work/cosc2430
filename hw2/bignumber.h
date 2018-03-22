@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <algorithm>
 #include <math.h>
 #include "stack.h"
@@ -214,44 +215,84 @@ BigNumber BigNumber::operator-(BigNumber& num2) {
     }
 }
 
-BigNumber BigNumber::operator*(BigNumber& num2) {
-    Stack<int> num1Digits;
-    Stack<BigNumber> subtotals;
-    for (int i = 0; i < num.length(); i++) num1Digits.push(num[i]-48);
-    BigNumber result("0");
-    int place = 0;
-    int carry = 0;
-    while (!num1Digits.isEmpty()) {
-        string subtotal = "";
-        int num1Digit = num1Digits.pop();
-        for (int i = num2.size()-1; i > -1; i--) {
-            int num2Digit = (num2.getNum()[i] - 48);
-            int digit3 = num1Digit * num2Digit + carry;
-            carry = digit3 / 10;
-            digit3 %= 10;
-            subtotal.insert(0, to_string(digit3));
+BigNumber BigNumber::operator*(BigNumber& num22) {
+	string num1 = this->getNum();
+	string num2 = num22.getNum();
+	int n1 = num1.size();
+    int n2 = num2.size();
+    if (n1 == 0 || n2 == 0)
+       return BigNumber();
+ 
+    // will keep the result number in vector
+    // in reverse order
+    vector<int> result(n1 + n2, 0);
+ 
+    // Below two indexes are used to find positions
+    // in result. 
+    int i_n1 = 0; 
+    int i_n2 = 0; 
+ 
+    // Go from right to left in num1
+    for (int i=n1-1; i>=0; i--)
+    {
+        int carry = 0;
+        int n1 = num1[i] - '0';
+ 
+        // To shift position to left after every
+        // multiplication of a digit in num2
+        i_n2 = 0; 
+         
+        // Go from right to left in num2             
+        for (int j=n2-1; j>=0; j--)
+        {
+            // Take current digit of second number
+            int n2 = num2[j] - '0';
+ 
+            // Multiply with current digit of first number
+            // and add result to previously stored result
+            // at current position. 
+            int sum = n1*n2 + result[i_n1 + i_n2] + carry;
+ 
+            // Carry for next iteration
+            carry = sum/10;
+ 
+            // Store result
+            result[i_n1 + i_n2] = sum % 10;
+ 
+            i_n2++;
         }
-        for (int i = 0; i < place; i++) {
-            subtotal += "0";
-        }
-        place++;
-        subtotals.push(BigNumber(subtotal));
+ 
+        // store carry in next cell
+        if (carry > 0)
+            result[i_n1 + i_n2] += carry;
+ 
+        // To shift position to left after every
+        // multiplication of a digit in num1.
+        i_n1++;
     }
-    if (carry > 0) {
-        carry = carry * pow(10, place);
-        subtotals.push(BigNumber(to_string(carry)));
-    }
+ 
+    // ignore '0's from the right
+    int i = result.size() - 1;
+    while (i>=0 && result[i] == 0)
+       i--;
+ 
+    // If all were '0's - means either both or
+    // one of num1 or num2 were '0'
+    if (i == -1)
+       return BigNumber();
+ 
+    // generate the result string
+    string s = "";
+    while (i >= 0)
+        s += std::to_string(result[i--]);
+	BigNumber res(s);
 
-    while(!subtotals.isEmpty()) {
-        result = result + subtotals.pop();
-    }
-
-    if ((isNegative && !num2.isNeg()) || (!isNegative && num2.isNeg())) {
-        result.setNeg(true);
+    if ((isNegative && !num22.isNeg()) || (!isNegative && num22.isNeg())) {
+        res.setNeg(true);
     } else {
-        result.setNeg(false);
+        res.setNeg(false);
     }
-    return result; 
+    return res; 
 }
 
 BigNumber BigNumber::operator/(BigNumber& num2) {

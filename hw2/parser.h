@@ -74,7 +74,7 @@ bool Parser::isValid(string& exp) {
     for (int i = 0; i < exp.length(); i++) {
         if (exp[i] == '-' && isOperand(exp[i+1])) {
             continue;
-        } else if (exp[i] == '+' && exp[i-1] == '(') {
+        } else if (exp[i] == '+' && (exp[i-1] == '(' || i == 0)) {
             continue;
         }
         if (isOperator(exp[i]) &&

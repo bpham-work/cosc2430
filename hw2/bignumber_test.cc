@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
 #include "bignumber.h"
+#include <iostream>
+using namespace std;
 
 namespace {
     TEST(BigNumber, ValidPositiveNum) {
@@ -544,6 +546,38 @@ namespace {
 
         ASSERT_EQ("9324", result.getNum());
         ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, DivideWadaHek) {
+        BigNumber num1("233541354");
+        BigNumber num2("6");
+        
+        BigNumber result = num1 / num2;
+
+        ASSERT_EQ("38923559", result.getNum());
+        ASSERT_FALSE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractWadaHek) {
+        BigNumber num1("1083498");
+        BigNumber num2("1679616");
+        
+        BigNumber result = num1 - num2;
+
+        ASSERT_FALSE(num1.absGt(num2));
+        ASSERT_EQ("596118", result.getNum());
+        ASSERT_TRUE(result.isNeg());
+    }
+
+    TEST(BigNumber, SubtractWadaHek2) {
+        BigNumber num1("3");
+        BigNumber num2("5");
+        
+        BigNumber result = num1 - num2;
+
+        ASSERT_FALSE(num1.absGte(num2));
+        ASSERT_EQ("2", result.getNum());
+        ASSERT_TRUE(result.isNeg());
     }
 }
 

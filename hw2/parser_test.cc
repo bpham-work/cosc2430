@@ -309,4 +309,13 @@ namespace {
 
         ASSERT_EQ("5,3,*,6,2,/,-,6,6,*,+", result);
     }
+
+    TEST(Parser, testderp3) {
+        Parser parser;
+        string exp = "1353135+233541354/(2+2*2)+3514351354351873238-(3131359-5631)";
+
+        string result = parser.parse(exp);
+
+        ASSERT_EQ("1353135,233541354,2,2,2,*,+,/,+,3514351354351873238,+,3131359,5631,-,-", result);
+    }
 }

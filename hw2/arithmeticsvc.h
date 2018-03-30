@@ -24,6 +24,7 @@ ArithmeticSvc::ArithmeticSvc() {
 
 string ArithmeticSvc::evaluate(string exp) {
     string postfix = parser.parse(exp);
+    cout << postfix << endl;
     int index = 0;
     Stack<BigNumber> nums;
     while (index < postfix.size()) {
@@ -59,6 +60,7 @@ bool ArithmeticSvc::isOperator(string& elem) {
 }
 
 BigNumber ArithmeticSvc::doMath(string& op, BigNumber& num1, BigNumber& num2) {
+    cout << num2.toString() << " " << op << " " << num1.toString() << endl;
     BigNumber result;
     if (op == "+")
         result = num2 + num1;
@@ -68,7 +70,7 @@ BigNumber ArithmeticSvc::doMath(string& op, BigNumber& num1, BigNumber& num2) {
         result = num2 * num1;
     else
         result = num2 / num1;
-    //cout << num2.toString() << " " << op << " " << num1.toString() << " = " << result.toString() << endl;
+    cout << num2.toString() << " " << op << " " << num1.toString() << " = " << result.toString() << endl;
     return result;
 }
 

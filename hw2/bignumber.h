@@ -22,6 +22,7 @@ class BigNumber {
         int size();
         bool isZero();
         bool absGte(BigNumber& num2);
+        bool absGt(BigNumber& num2);
         BigNumber clone(bool isNeg = false);
         string toString();
         BigNumber operator+(BigNumber& num2);
@@ -62,14 +63,14 @@ int BigNumber::size() {
     return num.size();
 }
 
-bool BigNumber::isZero() { return num == "0";  }
+bool BigNumber::isZero() { return num == "0"; }
 
 bool BigNumber::absGte(BigNumber& num2) {
     if (num.size() > num2.size()) {
         return true;
     } else if (num.size() < num2.size()) {
-        return false;
-    } else {
+		return false;
+	} else {
         Stack<int> num1Digits;
         Stack<int> num2Digits;
         for (int i = num.size()-1; i >= 0; i--) num1Digits.push(num[i]-48);
@@ -79,12 +80,40 @@ bool BigNumber::absGte(BigNumber& num2) {
             if (num1Digits.peek() != num2Digits.peek()) {
                 isEqual = false;
             }
-            if (num1Digits.pop() > num2Digits.pop()) {
+			int num1Digit = num1Digits.pop();
+			int num2Digit = num2Digits.pop();
+            if (num1Digit > num2Digit) {
                 return true;
-            }
+            } else if (num1Digit < num2Digit) {
+				return false;
+			}
         }
         if (isEqual) {
             return true;
+        }
+        return false;
+    }
+}
+
+bool BigNumber::absGt(BigNumber& num2) {
+    if (num.size() > num2.size()) {
+        return true;
+    } else if (num.size() < num2.size()) {
+		return false;
+    } else {
+        Stack<int> num1Digits;
+        Stack<int> num2Digits;
+        for (int i = num.size()-1; i >= 0; i--) num1Digits.push(num[i]-48);
+        for (int i = num2.size()-1; i >= 0; i--) num2Digits.push(num2.getNum()[i]-48);
+
+        while (!num1Digits.isEmpty() && !num2Digits.isEmpty()) {
+			int num1Digit = num1Digits.pop();
+			int num2Digit = num2Digits.pop();
+            if (num1Digit > num2Digit) {
+                return true;
+            } else if (num1Digit < num2Digit) {
+				return false;
+			}
         }
         return false;
     }
@@ -181,11 +210,16 @@ BigNumber BigNumber::operator-(BigNumber& num2) {
     if (num2.isNeg()) {
         BigNumber num2PositiveClone = num2.clone();
         return *this + num2PositiveClone;
-    } else if ((isNegative && !num2.isNeg()) || (num == "0" && !num2.isNeg())) {
+    }
+	else if ((isNegative && !num2.isNeg()) || (num == "0" && !num2.isNeg())) {
         BigNumber num1PositiveClone = this->clone();
         BigNumber result = num1PositiveClone + num2;
         result.setNeg(true);
         return result;
+    } else if (!isNegative && !num2.isNeg() && num2.absGt(*this)) {
+		BigNumber result = num2 - *this;
+		result.setNeg(true);
+		return result;
     } else {
         Stack<int> num1Digits;
         Stack<int> num2Digits;
@@ -296,14 +330,63 @@ BigNumber BigNumber::operator*(BigNumber& num22) {
 }
 
 BigNumber BigNumber::operator/(BigNumber& num2) {
-    BigNumber result(num, false);
-    BigNumber positiveClone2(num2.getNum(), false);
+    BigNumber result = this->clone();
+    BigNumber divisorClone = num2.clone();
+    cout << result.toString() << " / " << divisorClone.toString() << endl;
     int quotient = 0;
     bool resultNeg = false;
-    while (result.absGte(num2)) {
-        result = result - positiveClone2;
+	BigNumber largestDivisor = num2.clone();
+	BigNumber temp = num2.clone();
+    int power = 1;
+    int multiple = 1;
+	while (result.absGte(largestDivisor)) {
+        BigNumber m(to_string(multiple));
+		temp = largestDivisor * m;
+		if (temp.absGte(result)) break;
+		else {
+            largestDivisor = temp;
+            multiple *= 10;
+        }
+	}
+    while (!result.isNeg()) {
+		cout << largestDivisor.toString() << endl;
+        result = result - largestDivisor;
         quotient++;
+        cout << "RESULT: " << result.toString() << endl;
+        //cout << "QUOTIENT: " << quotient << endl;
     }
+    multiple /= 10;
+    quotient--;
+    cout << "QUOTIENT: " << quotient << endl;
+    cout << "MULTIPLE: " << multiple << endl;
+    quotient *= multiple;
+
+   	//string ans;
+	//string number = num;
+   
+    //// Find prefix of number that is larger
+    //// than divisor.
+    //int idx = 0;
+    //int temp = number[idx] - '0';
+    //while (temp < divisor)
+    //   temp = temp * 10 + (number[++idx] - '0');
+    // 
+    //// Repeatedly divide divisor with temp. After 
+    //// every division, update temp to include one 
+    //// more digit.
+    //while (number.size() > idx)
+    //{
+    //    // Store result in answer i.e. temp / divisor
+    //    ans += (temp / divisor) + '0';
+    //     
+    //    // Take next digit of number
+    //    temp = (temp % divisor) * 10 + number[++idx] - '0';
+    //}
+    // 
+    //// If divisor is greater than number
+    //if (ans.length() == 0)
+    //    return BigNumber(); 
+
     if ((isNegative && !num2.isNeg()) || (!isNegative && num2.isNeg())) {
         resultNeg = true;
     }

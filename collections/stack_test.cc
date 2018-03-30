@@ -55,4 +55,42 @@ namespace {
         ASSERT_EQ(2, stack.pop());
         ASSERT_EQ(1, stack.size());
     }
+
+    TEST(Stack, EmptyStacksShouldBeEqual) {
+        Stack<int> stack1;
+        Stack<int> stack2;
+
+        ASSERT_TRUE(stack1 == stack2);
+    }
+
+    TEST(Stack, StacksShouldBeEqual) {
+        Stack<int> stack1;
+        stack1.push(2);
+        Stack<int> stack2;
+        stack2.push(2);
+
+        ASSERT_TRUE(stack1 == stack2);
+    }
+
+    TEST(Stack, StacksShouldBeEqualChars) {
+        Stack<int> stack1;
+        stack1.push('t');
+        stack1.push('a');
+        stack1.push('t');
+        Stack<int> stack2;
+        stack2.push('t');
+        stack2.push('a');
+        stack2.push('t');
+
+        ASSERT_TRUE(stack1 == stack2);
+    }
+
+    TEST(Stack, StacksShouldNotBeEqual) {
+        Stack<int> stack1;
+        stack1.push(2);
+        Stack<int> stack2;
+        stack2.push(3);
+
+        ASSERT_FALSE(stack1 == stack2);
+    }
 }

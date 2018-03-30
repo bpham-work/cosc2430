@@ -14,6 +14,7 @@ class Stack {
         T& pop();
         T& peek();
         bool isEmpty();
+        bool operator==(Stack<T>& otherStack);
 };
 
 template <class T>
@@ -53,4 +54,30 @@ bool Stack<T>::isEmpty() {
     return length == 0;
 }
 
+template <class T>
+bool Stack<T>::operator==(Stack<T>& otherStack) {
+    if (this->size() != otherStack.size()) return false;
+    T* stack1Val = new T;
+    T* stack2Val = new T;
+    Stack<T> temp;
+    bool isSame = true;
+    while (!this->isEmpty()) {
+        *stack1Val = this->peek();
+        *stack2Val = otherStack.peek();
+        temp.push(this->pop());
+        otherStack.pop();
+        if (*stack1Val != *stack2Val) {
+            isSame = false;
+            break;
+        }
+    }
+    while (!temp.isEmpty()) {
+        T val = temp.pop();
+        this->push(val);
+        otherStack.push(val);
+    }
+    delete stack1Val;
+    delete stack2Val;
+    return isSame;
+}
 #endif

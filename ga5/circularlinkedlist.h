@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include <string>
+#include <stdexcept>
 using namespace std;
 
 template <class T>

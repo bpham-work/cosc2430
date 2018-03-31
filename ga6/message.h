@@ -10,6 +10,7 @@ class Message {
     string name;
     string type;
     string value;
+    string datetime;
     public:
         SqsType sqsType;
         int daysPassed = 0;
@@ -19,6 +20,8 @@ class Message {
         bool isValid(string toValidate);
         void incrementDaysPassed();
         string toString();
+    private:
+        string getCurrentDatetime();
 };
 
 #endif

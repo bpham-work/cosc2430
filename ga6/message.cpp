@@ -2,6 +2,8 @@
 #include <iostream>
 #include <ctype.h>
 #include <stdexcept>
+#include <stdio.h>
+#include <time.h>
 #include "message.h"
 using namespace std;
 
@@ -11,6 +13,7 @@ Message::Message(string name, string type, string value, SqsType sqsType): name(
         cout << value << endl;
         throw invalid_argument("Message created with invalid name or value");
     }
+    datetime = getCurrentDatetime();
 }
 
 bool Message::isExpired() {
@@ -52,6 +55,19 @@ bool Message::isValid(string toValidate) {
 
 void Message::incrementDaysPassed() {
     daysPassed++;
+}
+
+string Message::getCurrentDatetime() {
+    time_t rawtime;
+    struct tm * timeinfo;
+    char buffer [80];
+
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+
+    strftime (buffer,80,"%c",timeinfo);
+    puts (buffer);
+    return string(buffer);
 }
 
 //#include "gtest/gtest.h"

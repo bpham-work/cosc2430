@@ -15,31 +15,40 @@ MessageFactory::MessageFactory() {
 }
 
 Message MessageFactory::generate(int day) {
-    int messageType = getRandMod3();
+    int sqsType = getRand(3);
+    string messageType = getRandomMessageType();
     string name = "";
-    string value = "";
-    switch (messageType) {
+    string value = getRandomMessageValue(messageType, day);
+    switch (sqsType) {
         case 0:
             name = "REQUEST-" + getRandomString();
-            value = "Request created on day " + to_string(day);
-            return Request(name, "type", value);
+            return Request(name, messageType, value);
         case 1:
             name = "REPLY-" + getRandomString();
-            value = "Reply created on day " + to_string(day);
-            return Reply(name, "type", value);
+            return Reply(name, messageType, value);
         case 2:
             name = "ERROR-" + getRandomString();
-            value = "Error created on day " + to_string(day);
-            return Error(name, "type", value);
+            return Error(name, messageType, value);
         default:
             name = "INFO-" + getRandomString();
-            value = "Info created on day " + to_string(day);
-            return Info(name, "type", value);
+            return Info(name, messageType, value);
     }
 }
 
-int MessageFactory::getRandMod3() {
-    return rand() % 4;
+int MessageFactory::getRand(int hi) {
+    return rand() % (hi + 1);
+}
+
+string MessageFactory::getRandomMessageType() {
+    int messageType = getRand(3);
+    switch (messageType) {
+        case 0:
+            return "number";
+        case 1:
+            return "binary";
+        default:
+            return "string";
+    }
 }
 
 string MessageFactory::getRandomString() {
@@ -50,4 +59,17 @@ string MessageFactory::getRandomString() {
         result += possible[randomIndex];
     }
     return result;
+}
+
+string MessageFactory::getRandomMessageValue(string messageType, int day) {
+    if (messageType == "number") {    
+        // number data type
+        return to_string(getRand(100));
+    } else if (messageType == "binary") {
+        // binary data type
+        return "0000 0000 0000 0000";
+    } else {
+        // string data type
+        return "Message created on day " + to_string(day);
+    }
 }

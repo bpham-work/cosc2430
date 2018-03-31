@@ -7,7 +7,7 @@ using namespace std;
 
 Message::Message() {}
 Message::Message(string name, string type, string value, SqsType sqsType): name(name), type(type), value(value), sqsType(sqsType) {
-    if (!isValid(name) || !isValid(value)) {
+    if (!isValid(name) || (type == "string" && !isValid(value))) {
         cout << value << endl;
         throw invalid_argument("Message created with invalid name or value");
     }

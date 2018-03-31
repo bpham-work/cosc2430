@@ -9,8 +9,10 @@ class MessageFactory {
         MessageFactory();
         Message generate(int day);
     private:
-        int getRandMod3();
+        int getRand(int max);
         string getRandomString();
+        string getRandomMessageValue(string messageType, int day);
+        string getRandomMessageType();
 };
 
 #endif

@@ -16,7 +16,6 @@ class Message {
         int daysPassed = 0;
         Message();
         Message(string name, string type, string value, SqsType sqsType);
-        virtual bool isExpired();
         bool isValid(string toValidate);
         void incrementDaysPassed();
         string toString();

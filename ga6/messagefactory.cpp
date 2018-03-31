@@ -52,7 +52,7 @@ string MessageFactory::getRandomMessageType() {
 }
 
 string MessageFactory::getRandomString() {
-    string possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkelmnopqrstuvwxyz0123456789-_.";
+    string possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkelmnopqrstuvwxyz0123456789-_";
     string result = "";
     for (int i = 0; i < 6; i++) {
         int randomIndex = rand() % (possible.size() - 1);

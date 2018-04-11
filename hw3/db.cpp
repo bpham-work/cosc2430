@@ -1,5 +1,5 @@
 #include "db.h"
-#include "record.h"
+#include "splitter.h"
 
 #include <vector>
 #include <set>
@@ -9,9 +9,10 @@
 #include <utility>
 #include <iostream>
 #include <algorithm>
+#include <fstream>
 using namespace std;
 
-vector<set<int>> Database::getMatchingAttrSets(vector<string> fields) {
+vector<set<int>> Database::getMatchingAttrSets(vector<string>& fields) {
     vector<set<int>> sets;
     for (vector<string>::iterator it = fields.begin(); it != fields.end(); it++) {
         sets.push_back(attr_map[*it]);
@@ -19,32 +20,32 @@ vector<set<int>> Database::getMatchingAttrSets(vector<string> fields) {
     return sets;
 }
 
-set<int> Database::intersects(vector<string> fields) {
-    vector<set<int>> sets = getMatchingAttrSets(fields);
+set<int> Database::intersects(vector<string>& fields) {
     set<int> intersect;
-    if (sets.size() > 0) {
-        intersect = sets[0];
-        if (sets.size() > 1) {
-            for (vector<set<int>>::iterator it = sets.begin(); it != sets.end(); it++) {
-                set_intersection(it->begin(), it->end(), intersect.begin(), intersect.end(), inserter(intersect, intersect.begin()));
-            }
+    set<int> temp;
+    for (int i = 0; i < fields.size(); i++) {
+        temp.clear();
+        if (i == 0) {
+            intersect = attr_map[fields[i]];
+        } else {
+            set_intersection(attr_map[fields[i]].begin(), attr_map[fields[i]].end(), intersect.begin(), intersect.end(), inserter(temp, temp.begin()));
+            intersect = temp;
         }
     }
     return intersect;
 }
 
-void Database::remove(vector<string> fields) {
+void Database::remove(vector<string>& fields) {
     set<int> intersect = intersects(fields);
-    vector<set<int>> sets = getMatchingAttrSets(fields);
     for (set<int>::iterator it = intersect.begin(); it != intersect.end(); it++) {
-        for (vector<set<int>>::iterator sit = sets.begin(); sit != sets.end(); sit++) {
-            sit->erase(*it);
-        }
+        //for (int i = 0; i < fields.size(); i++) {
+        //    attr_map[fields[i]].erase(*it);
+        //}
         records.erase(*it);
     }
 }
 
-vector<string> Database::get(vector<string> fields) {
+vector<string> Database::get(vector<string>& fields) {
     vector<string> result;
     set<int> intersect = intersects(fields);
     for (set<int>::iterator it = intersect.begin(); it != intersect.end(); it++) {
@@ -53,11 +54,25 @@ vector<string> Database::get(vector<string> fields) {
     return result;
 }
 
-void Database::add(string recordStr) {
-    Record record(recordStr);
-    records.insert(make_pair(index, recordStr));
-    for (int i = 0; i < record.get_attrs().size(); i++) {
-        attr_map[record.get_attrs()[i]].insert(index);
+void Database::get(vector<string>& fields, ofstream& outfile) {
+    set<int> intersect = intersects(fields);
+    for (set<int>::iterator it = intersect.begin(); it != intersect.end(); it++) {
+        outfile << records[*it] << endl;
+    }
+    outfile << endl;
+}
+
+void Database::add(string& recordStr) {
+    records[index] = recordStr;
+    vector<string> attrs = parseAttrs(recordStr);
+    for (int i = 0; i < attrs.size(); i++) {
+        attr_map[attrs[i]].insert(index);
     }
     index++;
+}
+
+vector<string> Database::parseAttrs(string& unparsed) {
+    unparsed.erase(0, 1);
+    unparsed.erase(unparsed.size()-1, 1);
+    return util::split(unparsed, ',');
 }

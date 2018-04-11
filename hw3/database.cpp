@@ -1,8 +1,10 @@
 #include "db.h"
 #include "record.h"
-#include <vector>
+#include "splitter.h"
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <chrono>
 using namespace std;
 
 void print(vector<string> v) {
@@ -10,23 +12,63 @@ void print(vector<string> v) {
         cout << *it << endl;
 }
 
-int main() {
+void write(vector<string>& v, ofstream& outfile) {
+    for (vector<string>::iterator it = v.begin(); it != v.end(); it++)
+        outfile << *it << endl;
+    outfile << endl; 
+}
+
+string getArg(string input) {
+    return input.substr(input.find("=")+1);
+}
+
+string getOp(string& record) {
+    return record.substr(0, record.find(" "));
+}
+
+string parseRecord(string& record) {
+    return record.substr(record.find("{"));
+}
+
+vector<string> parseFields(string fields) {
+    fields.erase(0, fields.find("{")+1);
+    fields.erase(fields.size()-1, 1);
+    return util::split(fields, ',');
+}
+
+int main(int argc, char* argv[]) {
+    auto ws = chrono::system_clock::now();
+    string input = getArg(argv[1]);
+    string output = getArg(argv[2]);
+    ifstream infile(input);
+    ofstream outfile(output);
     Database db;
-    db.add("{id:1234567,first:Mary,last:Green,DOB:1996-10-03,GPA:4.0}");
-    db.add("{id:1234568,first:Peter,last:White,DOB:1997-05-22,GPA:3.8}");
-    db.add("{id:1654238,first:Nick,last:Park,DOB:1995-08-18,GPA:4.0}");
-    db.add("{id:1234587,first:Katy,last:Green,DOB:1995-08-18,GPA:4.0}");
-    vector<string> vec;
-    vector<string> vec2;
-    vec.push_back("GPA:4.0");
-    vec2.push_back("first:Mary");
-    print(db.get(vec));
-    db.remove(vec2);
-    db.add("{id:1234567,first:Mary,last:Green,DOB:1996-10-03,GPA:4.0}");
-    
-    vector<string> v3;
-    v3.push_back("last:Green");
-    v3.push_back("GPA:4.0");
-    print(db.get(v3));
+
+    string record;
+    while (getline(infile, record)) {
+        string op = getOp(record);
+        auto start = chrono::system_clock::now();
+        if (op == "add") {
+            string parsed = parseRecord(record);
+            db.add(parsed);
+        } else if (op == "get") {
+            vector<string> fields = parseFields(record);
+            vector<string> results = db.get(fields);
+            print(results);
+            write(results, outfile);
+        } else {
+            vector<string> fields = parseFields(record);
+            db.remove(fields);
+        } 
+        auto end = chrono::system_clock::now();
+        auto elapsed = chrono::duration_cast<chrono::milliseconds>(end - start);
+        cout << op << ": " << elapsed.count() << endl;
+    }
+    infile.close();
+    outfile.close();
+
+    auto we = chrono::system_clock::now();
+    auto e = chrono::duration_cast<chrono::milliseconds>(we - ws);
+    cout << "Total: " << e.count() << endl;
     return 0;
 }

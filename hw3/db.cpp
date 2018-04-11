@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 vector<set<int>> Database::getMatchingAttrSets(vector<string> fields) {
@@ -55,15 +56,8 @@ vector<string> Database::get(vector<string> fields) {
 void Database::add(string recordStr) {
     Record record(recordStr);
     records.insert(make_pair(index, recordStr));
-    for (vector<string>::iterator it = record.get_attrs().begin(); it != record.get_attrs().end(); it++) {
-        unordered_map<string, set<int>>::iterator attrs = attr_map.find(*it);
-        if (attrs != attr_map.end()) {
-            attrs->second.insert(index);
-        } else {
-            set<int> matchIndicies;
-            matchIndicies.insert(index);
-            attr_map.insert({*it, matchIndicies});
-        }
+    for (int i = 0; i < record.get_attrs().size(); i++) {
+        attr_map[record.get_attrs()[i]].insert(index);
     }
     index++;
 }

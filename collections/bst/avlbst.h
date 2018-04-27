@@ -23,7 +23,7 @@ class AvlBst {
         void printInOrder();
         void printInOrder(BstNode<Q, T>* node);
         vector<T> getValuesInOrder();
-        void getValuesInOrder(BstNode<Q, T>* node, vector<T>& result);
+        vector<T> getValuesInOrder(BstNode<Q, T>* node, vector<T>& result);
 };
 
 template <class Q, class T>
@@ -158,7 +158,7 @@ vector<T> AvlBst<Q, T>::getValuesInOrder() {
 }
 
 template <class Q, class T>
-void AvlBst<Q, T>::getValuesInOrder(BstNode<Q, T>* node, vector<T>& result) {
+vector<T> AvlBst<Q, T>::getValuesInOrder(BstNode<Q, T>* node, vector<T>& result) {
     if (node != nullptr) {
         getValuesInOrder(node->left, result);
         result.push_back(node->val);

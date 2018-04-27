@@ -47,6 +47,8 @@ vector<Food> FoodTracker::getDairy() {
 void FoodTracker::addFavorite(Food& food) {
     food.setAsFavorite();
     foodTracker.append(food);
+
+    // Update favorited food in respective tree
     switch (food.category) {
         case 1:
             fruitsVegTree.insert(food.calories, food);
@@ -66,6 +68,8 @@ void FoodTracker::addFavorite(Food& food) {
 void FoodTracker::addFood(string& unparsedFood) {
     vector<string> fields = util::split(unparsedFood, ',');
     Food food(fields[0], stoi(fields[1]), stof(fields[2]));
+
+    // Add food to respective tree
     switch (food.category) {
         case 1:
             fruitsVegTree.insert(food.calories, food);

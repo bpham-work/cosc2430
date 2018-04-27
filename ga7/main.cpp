@@ -36,6 +36,8 @@ int main() {
     vector<Food> fruitsVeg = foodTracker.getFruitsVeg();
     vector<Food> dairy = foodTracker.getDairy();
     int input;
+
+    // Inquire for favorite foods for 28 days (4 weeks)
     for (int day = 1; day <= 28; day++) {
         printFoods(fruitsVeg);
         cout << "Enter index of favorite fruits/veg on day " << day << " or -1 if you don't have any: ";

@@ -52,45 +52,37 @@ int AvlBst<Q, T>::max(int int1, int int2) {
 
 template <class Q, class T>
 void AvlBst<Q, T>::insert(T val) {
-    if (root == nullptr) {
-        root = new BstNode<Q, T>(val);
-    } else {
-        insert(root, val);
-    }
+    root = insert(root, val);
 }
 
 template <class Q, class T>
 BstNode<Q, T>* AvlBst<Q, T>::insert(BstNode<Q, T>* node, T val) {
-    if (node == nullptr) {
+    if (node == nullptr || val == node->val) {
         return new BstNode<Q, T>(val);
     } else if (val < node->val) {
         node->left = insert(node->left, val);
     } else if (val > node->val) {
         node->right = insert(node->right, val);
-    } else {
-        return node;
     }
-    //int balance = height(node->left) - height(node->right);
-    //// left left
-    //if (balance > 1 && val < node->left->val) {
-    //    return rightRotate(node);
-    //}
-    //// right right
-    //if (balance < -1 && val > node->right->val) {
-    //    return leftRotate(node);
-    //}
-    //// left right
-    //if (balance > 1 && val > node->left->val) {
-    //    cout << "left right" << endl;
-    //    node->left = leftRotate(node->left);
-    //    return rightRotate(node);
-    //}
-    //// right left
-    //if (balance < -1 && val < node->right->val) {
-    //    cout << "right left" << endl;
-    //    node->right = rightRotate(node->right);
-    //    return leftRotate(node);
-    //}
+    int balance = height(node->left) - height(node->right);
+    // left left
+    if (balance > 1 && val < node->left->val) {
+        return rightRotate(node);
+    }
+    // right right
+    if (balance < -1 && val > node->right->val) {
+        return leftRotate(node);
+    }
+    // left right
+    if (balance > 1 && val > node->left->val) {
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
+    }
+    // right left
+    if (balance < -1 && val < node->right->val) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
     return node;
 }
 
@@ -108,6 +100,25 @@ BstNode<Q, T>* AvlBst<Q, T>::insert(BstNode<Q, T>* node, Q key, T val) {
     } else if (key > node->key) {
         node->right = insert(node->right, key, val);
     }
+    int balance = height(node->left) - height(node->right);
+    // left left
+    if (balance > 1 && key < node->left->key) {
+        return rightRotate(node);
+    }
+    // right right
+    if (balance < -1 && key > node->right->key) {
+        return leftRotate(node);
+    }
+    // left right
+    if (balance > 1 && key > node->left->key) {
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
+    }
+    // right left
+    if (balance < -1 && key < node->right->key) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
     return node;
 }
 
@@ -119,10 +130,6 @@ void AvlBst<Q, T>::printInOrder() {
 
 template <class Q, class T>
 BstNode<Q, T>* AvlBst<Q, T>::rightRotate(BstNode<Q, T>* node) {
-    //BstNode<Q, T>* temp1 = node->left;
-    //BstNode<Q, T>* temp2 = temp1->right;
-    //temp1->right = node;
-    //node->left = temp2;
     BstNode<Q, T>* temp = node->left;
     node->left = temp->right;
     temp->right = node;
@@ -131,11 +138,6 @@ BstNode<Q, T>* AvlBst<Q, T>::rightRotate(BstNode<Q, T>* node) {
 
 template <class Q, class T>
 BstNode<Q, T>* AvlBst<Q, T>::leftRotate(BstNode<Q, T>* node) {
-    //BstNode<Q, T>* temp1 = node->right;
-    //BstNode<Q, T>* temp2 = temp1->left;
-    //temp1->left = node;
-    //node->right = temp2;
-    //return temp1;
     BstNode<Q, T>* temp = node->right;
     node->right = temp->left;
     temp->left = node;

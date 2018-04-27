@@ -1,0 +1,57 @@
+bagel,3,310
+cornflakes,3,370
+crumpets,3,398
+macaroni,3,95
+cream crackers,3,440
+rice,3,200
+spaghetti,3,301
+crackerbread,3,325
+naan bread,3,320
+potatoes,3,70
+fried rice,3,999
+brown rice,3,323
+noodles,3,80
+anchovies,2,300
+bacon,2,500
+roast beef,2,300
+chicken,2,220
+cod,2,150
+cod chip,2,200
+duck roast,2,400
+fish cake,2,201
+fish fingers,2,220
+halibut,2,424
+ham,2,6
+grilled herring,2,161
+liver pate,2,151
+lamb,2,249
+lobster boiled,2,355
+mackeral,2,423
+pork,2,434
+prawns,2,555
+rabbit,2,1245
+sardines,2,954
+sausage roll,2,164
+steak,2,85
+turkey,2,144
+apple,1,40
+banana,1,20
+beans,1,10
+carrot,1,12
+cabbage,1,15
+blackberries,1,13
+cherry,1,8
+cucumber,1,5
+dates,1,1
+grapes,1,16
+kiwi,1,99
+leek,1,75
+milk,4,45
+cream cheese,4,999
+eggs,4,55
+custard,4,93
+ice cream,4,87
+yogurt,4,15
+mousse,4,76
+milk soya,4,854
+milk skimmed,4,50
